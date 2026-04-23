@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>anneal-alloy · Tournament Consensus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #fafaf7;
+    --rule: #1a1a1a;
+    --accent: #b84a1f;
+    --cool: #2d5e7f;
+    --warm: #8a6e2f;
+    --muted: #5a5a55;
+    --grid: rgba(10, 10, 10, 0.06);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  body {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: 0 0;
+  }
+  .sheet {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 48px 96px;
+  }
+  header.masthead {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 18px 0 14px;
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .masthead .title {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-weight: 900;
+    font-size: 42px;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .masthead .title em { font-style: italic; color: var(--accent); }
+  .masthead .meta {
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+  .hook {
+    font-size: 20px;
+    line-height: 1.45;
+    max-width: 760px;
+    margin: 0 0 40px;
+    color: var(--ink);
+  }
+  .hook strong { color: var(--accent); font-weight: 700; }
+  h2 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 28px;
+    margin: 48px 0 18px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--ink);
+    letter-spacing: -0.01em;
+  }
+  h2 .num {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    display: inline-block;
+    width: 38px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin: 28px 0 10px;
+  }
+  p { max-width: 780px; }
+  .lede {
+    font-size: 19px;
+    line-height: 1.55;
+  }
+  .pipeline-card {
+    background: #fff;
+    border: 1px solid var(--ink);
+    padding: 28px 28px 24px;
+    margin: 18px 0 26px;
+    position: relative;
+  }
+  .stage-grid {
+    display: grid;
+    grid-template-columns: 48px 1fr 180px;
+    gap: 14px 18px;
+    align-items: baseline;
+  }
+  .stage-n {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    padding-top: 3px;
+  }
+  .stage-name {
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .stage-agent {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    color: var(--cool);
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+  .stage-note {
+    grid-column: 2 / 4;
+    font-size: 14px;
+    color: var(--muted);
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(10,10,10,0.15);
+    margin-bottom: 4px;
+  }
+  .stage-grid > div:nth-last-child(-n+3) .stage-note { border-bottom: none; }
+  .alloy-stage {
+    background: linear-gradient(180deg, rgba(184,74,31,0.07), rgba(184,74,31,0.02));
+    border: 1px solid var(--accent);
+    padding: 26px;
+    margin: 26px 0;
+  }
+  .alloy-stage h3 {
+    color: var(--accent);
+    margin-top: 0;
+  }
+  .tournament-diagram {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    background: var(--paper);
+    border: 1px dashed rgba(10,10,10,0.25);
+    padding: 18px 22px;
+    margin: 18px 0;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .bias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    margin: 20px 0 8px;
+  }
+  .bias-card {
+    border: 1px solid var(--ink);
+    padding: 16px 16px 14px;
+    background: #fff;
+  }
+  .bias-card .label {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .bias-card .title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .bias-card .desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .invariants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px 20px;
+    margin: 16px 0 8px;
+    counter-reset: inv;
+  }
+  .inv {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .inv::before {
+    counter-increment: inv;
+    content: counter(inv, decimal-leading-zero);
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    padding-top: 4px;
+    min-width: 30px;
+  }
+  .inv-body {
+    font-size: 14.5px;
+    line-height: 1.5;
+    border-left: 2px solid var(--ink);
+    padding-left: 14px;
+  }
+  .inv-body strong { font-weight: 700; }
+  .cost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+  .cost-table thead {
+    border-bottom: 2px solid var(--ink);
+  }
+  .cost-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: normal;
+  }
+  .cost-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid rgba(10,10,10,0.08);
+    vertical-align: top;
+  }
+  .cost-table tr.alloy-row {
+    background: rgba(184,74,31,0.06);
+  }
+  .cost-table tr.alloy-row td:first-child {
+    font-weight: 700;
+    color: var(--accent);
+  }
+  footer {
+    margin-top: 64px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+  }
+  a { color: var(--accent); text-decoration: underline dotted; text-underline-offset: 3px; }
+  a:hover { text-decoration-style: solid; }
+  code {
+    font-family: "JetBrains Mono", Menlo, monospace;
+    font-size: 0.88em;
+    background: rgba(10,10,10,0.06);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <div>
+      <div class="title">anneal-<em>alloy</em></div>
+      <div style="font-size:13px; color:var(--muted); margin-top:6px; font-style:italic;">
+        Tournament Consensus — N biased planners, one synthesized plan
+      </div>
+    </div>
+    <div class="meta">
+      v0.1.0 · MIT<br>
+      Nick Krzemienski<br>
+      2026-04-22
+    </div>
+  </header>
+
+  <p class="hook">
+    Three architectures share the same <strong>seven invariants</strong>. They differ only in <strong>how stage 4 generates its plan</strong>. Alloy's stage 4 runs <strong>N parallel Prometheus variants under different biases</strong> and hands the result to a <strong>Synthesizer</strong> that composes — never plans. Momus audits the blend. Red Team attacks the blend. Oracle renders bird's-eye verdict. Hephaestus builds the real artifact. Atlas serializes.
+  </p>
+
+  <h2><span class="num">01</span>The Tournament</h2>
+
+  <div class="pipeline-card alloy-stage">
+    <h3>Stage 4 · Plan (Alloy-specific)</h3>
+    <p style="margin-top:0">
+      N Prometheus-Alloy variants fan out in parallel. Each receives the same Metis directives and probe report, but a different bias. After all N complete, the Synthesizer reads them together and composites one coherent plan — <em>it cannot write novel phases</em>.
+    </p>
+
+<pre class="tournament-diagram">
+       Metis directives + probe report
+                     │
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+   ┌─────────┐ ┌──────────┐ ┌─────────┐ ...
+   │Prometheus│ │Prometheus│ │Prometheus│     N parallel
+   │  bias=1  │ │  bias=2  │ │  bias=N  │     xargs -P
+   └────┬─────┘ └────┬─────┘ └────┬────┘
+        └────────────┼────────────┘
+                     ↓
+              ┌──────────────┐
+              │ Synthesizer  │   composites, never plans
+              └──────┬───────┘
+                     ↓
+              plan/ + synthesis-provenance.md
+                     ↓
+                  Momus → Red-Team Trinity → Oracle
+</pre>
+
+    <div class="bias-grid">
+      <div class="bias-card">
+        <div class="label">Bias · 01</div>
+        <div class="title">correctness</div>
+        <div class="desc">Exhaustive gate tests, phased rollout, every success measurable.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 02</div>
+        <div class="title">minimalist</div>
+        <div class="desc">Smallest viable plan, strip ceremony, YAGNI to the bone.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 03</div>
+        <div class="title">defensive</div>
+        <div class="desc">Every phase has a rollback, checkpoint before risk.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 04</div>
+        <div class="title">performance</div>
+        <div class="desc">Vendor only what's used. No speculative infra.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 05</div>
+        <div class="title">ux</div>
+        <div class="desc">Status-line progress, helpful errors, friendly failure paths.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 06 (N=7)</div>
+        <div class="title">verification</div>
+        <div class="desc">Instrument-before-theorize. Debug hooks baked in.</div>
+      </div>
+      <div class="bias-card">
+        <div class="label">Bias · 07 (N=7)</div>
+        <div class="title">migration</div>
+        <div class="desc">Every breaking change has a migration step.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">02</span>The Seven-Stage Spine</h2>
+
+  <div class="pipeline-card">
+    <div class="stage-grid">
+      <div class="stage-n">S 01</div>
+      <div class="stage-name">Intent Gate</div>
+      <div class="stage-agent">—</div>
+      <div class="stage-note">Classify task shape; reject unsafe inputs.</div>
+
+      <div class="stage-n">S 02</div>
+      <div class="stage-name">Probe</div>
+      <div class="stage-agent">explore</div>
+      <div class="stage-note">Scan repo; enumerate user + project skills; reference files.</div>
+
+      <div class="stage-n">S 03</div>
+      <div class="stage-name">Enrich</div>
+      <div class="stage-agent">metis · opus</div>
+      <div class="stage-note">Pre-plan directives + slop-risk flags. Bias-orthogonal directives.</div>
+
+      <div class="stage-n">S 04</div>
+      <div class="stage-name">Plan (Tournament)</div>
+      <div class="stage-agent">N × prometheus-alloy · opus<br>+ synthesizer · opus<br>+ momus · opus</div>
+      <div class="stage-note">N parallel biased planners. Synthesizer composites. Momus audits the blend.</div>
+
+      <div class="stage-n">S 05</div>
+      <div class="stage-name">Review</div>
+      <div class="stage-agent">3 × red-team · sonnet<br>+ oracle · opus</div>
+      <div class="stage-note">Security · Scope · Assumptions in parallel. Oracle bird's-eye verdict.</div>
+
+      <div class="stage-n">S 06</div>
+      <div class="stage-name">Validate</div>
+      <div class="stage-agent">hephaestus · sonnet</div>
+      <div class="stage-note">Build real artifact. Capture real evidence. No mocks. Ever.</div>
+
+      <div class="stage-n">S 07</div>
+      <div class="stage-name">Emit / Re-loop</div>
+      <div class="stage-agent">atlas · sonnet</div>
+      <div class="stage-note">Rollup → EMIT XML + plan dir, or route FAIL back to Stage 1.</div>
+    </div>
+  </div>
+
+  <p style="font-size:14px; color:var(--muted); margin-top:-8px;">
+    On validate FAIL, Alloy routes to <strong>Intent Gate</strong> — not to Synthesizer. A failed synthesis suggests the bias mix was wrong; the whole tournament re-runs with the failure folded into new Metis directives.
+  </p>
+
+  <h2><span class="num">03</span>The Seven Invariants</h2>
+
+  <p>
+    These apply identically to Cast, Alloy, and Temper. An anneal run that violates any invariant is invalid and must not emit.
+  </p>
+
+  <div class="invariants">
+    <div class="inv"><div class="inv-body"><strong>Red team always runs.</strong> Three parallel adversaries. Not a flag. Cannot be disabled.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Validation always runs.</strong> Hephaestus builds the real artifact. Empty evidence → FAIL.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Dual output.</strong> Every run produces an Opus 4.7 semantic-XML prompt AND a plan directory.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Skill enrichment automatic.</strong> Probe scans <code>~/.claude/skills/</code> and project skills.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Unbounded re-loop on FAIL.</strong> Failure folds into the next run's constraints. Not a retry.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Parallelization by default.</strong> Red team, validators, and Alloy planners fan out always.</div></div>
+    <div class="inv"><div class="inv-body"><strong>Category routing.</strong> <code>--type ultrabrain|deep|quick</code> — never <code>--model</code>.</div></div>
+  </div>
+
+  <h2><span class="num">04</span>Cost Profile · Alloy vs Cast vs Temper</h2>
+
+  <table class="cost-table">
+    <thead>
+      <tr>
+        <th>Architecture</th>
+        <th>Stage-4 shape</th>
+        <th>Spawns</th>
+        <th>Wall-clock</th>
+        <th>Best for</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cast</td>
+        <td>One planner, one shot</td>
+        <td>~8</td>
+        <td>~4 min</td>
+        <td>Bug fixes, scoped refactors, clear specs</td>
+      </tr>
+      <tr class="alloy-row">
+        <td>Alloy</td>
+        <td>N parallel biased planners → Synthesizer</td>
+        <td>~8 + 2N (~18 at N=5)</td>
+        <td>~6 min</td>
+        <td>Novel architecture, greenfield, high-stakes</td>
+      </tr>
+      <tr>
+        <td>Temper</td>
+        <td>One plan, iteratively deepened</td>
+        <td>~8 × depth</td>
+        <td>~7 min at depth 3</td>
+        <td>Well-scoped but complex; convergence-friendly</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2><span class="num">05</span>Install · Usage</h2>
+
+  <div class="pipeline-card">
+    <h3>Install</h3>
+<pre class="tournament-diagram">
+/plugin marketplace add /Users/nick/Desktop/anneal/alloy
+/plugin install anneal-alloy@anneal-alloy-dev
+</pre>
+
+    <h3>Usage</h3>
+<pre class="tournament-diagram">
+/anneal-alloy:anneal "&lt;task&gt;"                    # N=5 default
+/anneal-alloy:anneal "&lt;task&gt;" --versions 3        # cheaper
+/anneal-alloy:anneal "&lt;task&gt;" --versions 7        # richer
+/anneal-alloy:anneal "&lt;task&gt;" --loop              # unbounded re-loop
+/anneal-alloy:anneal "&lt;task&gt;" --type ultrabrain    # category routing
+</pre>
+
+    <h3>Refused flags</h3>
+<pre class="tournament-diagram">
+--no-red-team            # red team is invariant 1
+--no-validate            # validation is invariant 2
+--versions 1             # use /anneal-cast:anneal
+--versions 8+            # synthesizer signal-to-noise collapses
+</pre>
+  </div>
+
+  <footer>
+    <span>anneal-alloy · 2026</span>
+    <span>Three architectures. Seven invariants. One plugin family.</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

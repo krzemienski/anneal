@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Anneal · Cast · v0.1.0 loaded'"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "anneal-cast-dev",
+  "owner": {
+    "name": "Nick Krzemienski",
+    "email": "nick@krzemienski.com"
+  },
+  "metadata": {
+    "description": "Local development marketplace for anneal-cast. Install with: /plugin marketplace add <path-to-anneal-cast-plugin>",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "anneal-cast",
+      "source": ".",
+      "description": "Linear single-pour plan-review plugin — one planner, always-on red team, functional validation.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Nick Krzemienski",
+        "email": "nick@krzemienski.com"
+      },
+      "homepage": "https://github.com/krzemienski/anneal",
+      "license": "MIT",
+      "keywords": [
+        "plan",
+        "review",
+        "multi-agent",
+        "annealing",
+        "red-team",
+        "functional-validation"
+      ],
+      "category": "planning"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "anneal-alloy",
+  "version": "0.1.0",
+  "description": "Tournament Consensus architecture of the Anneal plugin family. N parallel planner biases compete; a synthesizer blends their best material into one plan. Always-on red team, always-on functional validation.",
+  "author": {
+    "name": "Nick Krzemienski",
+    "email": "nick@krzemienski.com"
+  },
+  "homepage": "https://github.com/krzemienski/anneal",
+  "repository": "https://github.com/krzemienski/anneal",
+  "license": "MIT",
+  "keywords": [
+    "plan",
+    "review",
+    "multi-agent",
+    "annealing",
+    "tournament",
+    "consensus",
+    "synthesis",
+    "claude-code",
+    "plugin",
+    "red-team",
+    "functional-validation"
+  ]
+}

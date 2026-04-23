@@ -1,0 +1,1052 @@
+{
+  "deepen-loop": [
+    {
+      "name": "seed-depth-0-continue",
+      "synthetic_input": {
+        "depth": 0,
+        "scores": [
+          62.0
+        ],
+        "cap": 3
+      },
+      "expected": "continue; no rule fires at depth 0 with 1 score and cap=3",
+      "passed": true,
+      "checks": [
+        {
+          "label": "mentions-convergence-check-py",
+          "passed": true
+        },
+        {
+          "label": "no-vibe-convergence",
+          "passed": true
+        },
+        {
+          "label": "exit-code-1-continue",
+          "passed": true
+        },
+        {
+          "label": "handles-depth-0-seed",
+          "passed": true
+        },
+        {
+          "label": "state-persistence",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "variance-converged",
+      "synthetic_input": {
+        "depth": 3,
+        "scores": [
+          80.0,
+          84.9,
+          85.0,
+          85.05
+        ],
+        "cap": 5
+      },
+      "expected": "converged; reason=variance; emit final envelope",
+      "passed": true,
+      "checks": [
+        {
+          "label": "variance-handled",
+          "passed": true
+        },
+        {
+          "label": "calls-the-script",
+          "passed": true
+        },
+        {
+          "label": "exit-0-converged",
+          "passed": true
+        },
+        {
+          "label": "output-depth-history",
+          "passed": true
+        },
+        {
+          "label": "output-final-depth",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "cap-hit",
+      "synthetic_input": {
+        "depth": 3,
+        "scores": [
+          50.0,
+          65.0,
+          78.0,
+          88.0
+        ],
+        "cap": 3
+      },
+      "expected": "exit on cap; reason=cap",
+      "passed": true,
+      "checks": [
+        {
+          "label": "cap-handled",
+          "passed": true
+        },
+        {
+          "label": "no-skip-depths",
+          "passed": true
+        },
+        {
+          "label": "convergence-reason-emitted",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "redteam-block-not-loop-exit",
+      "synthetic_input": {
+        "depth": 1,
+        "scores": [
+          62.0,
+          78.0
+        ],
+        "cap": 3,
+        "redteam_block": true
+      },
+      "expected": "Red Team BLOCK does not exit loop; folds into next depth",
+      "passed": true,
+      "checks": [
+        {
+          "label": "parallel-fan-out",
+          "passed": true
+        },
+        {
+          "label": "prometheus-before-redteam",
+          "passed": true
+        },
+        {
+          "label": "redteam-before-momus",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "convergence-check-exit-2",
+      "synthetic_input": {
+        "depth": -1,
+        "scores": [],
+        "cap": 3
+      },
+      "expected": "exit 2 invalid; retry once then abort",
+      "passed": true,
+      "checks": [
+        {
+          "label": "exit-2-invalid",
+          "passed": true
+        },
+        {
+          "label": "retry-then-abort",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "prometheus-temper": [
+    {
+      "name": "depth-0-cold-start",
+      "synthetic_input": {
+        "depth": 0,
+        "metis_directives": [
+          "..."
+        ]
+      },
+      "expected": "seed plan; no prior plan bundle",
+      "passed": true,
+      "checks": [
+        {
+          "label": "depth-0-branch",
+          "passed": true
+        },
+        {
+          "label": "includes-functional-validation",
+          "passed": true
+        },
+        {
+          "label": "metis-directive-aware",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "depth-1-folds-feedback",
+      "synthetic_input": {
+        "depth": 1,
+        "prior_momus_score": 62,
+        "blocking_issues_count": 3
+      },
+      "expected": "rewrite (not diff); address all blocking issues + CRITICAL red team findings",
+      "passed": true,
+      "checks": [
+        {
+          "label": "address-every-blocking",
+          "passed": true
+        },
+        {
+          "label": "full-rewrite-no-diff",
+          "passed": true
+        },
+        {
+          "label": "address-critical-redteam",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "depth-2-score-trajectory-awareness",
+      "synthetic_input": {
+        "depth": 2,
+        "score_history": [
+          62.0,
+          78.0
+        ]
+      },
+      "expected": "aware of trajectory; annotate if score may drop",
+      "passed": true,
+      "checks": [
+        {
+          "label": "trajectory-concept",
+          "passed": true
+        },
+        {
+          "label": "annotate-score-drop",
+          "passed": true
+        },
+        {
+          "label": "convergence-awareness",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "metis-contradicts-user-goal",
+      "synthetic_input": {
+        "contradiction": true
+      },
+      "expected": "surface contradiction; do not silently resolve",
+      "passed": true,
+      "checks": [
+        {
+          "label": "surface-contradiction",
+          "passed": true
+        },
+        {
+          "label": "no-silent-resolve",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "output-schema-sections",
+      "synthetic_input": {
+        "emit": "plan"
+      },
+      "expected": "Thesis + Phases with success criteria + risk + functional-validation",
+      "passed": true,
+      "checks": [
+        {
+          "label": "has-thesis-section",
+          "passed": true
+        },
+        {
+          "label": "has-phases-section",
+          "passed": true
+        },
+        {
+          "label": "has-success-criteria",
+          "passed": true
+        },
+        {
+          "label": "has-risk-assessment",
+          "passed": true
+        },
+        {
+          "label": "functional-validation-phase",
+          "passed": true
+        },
+        {
+          "label": "iron-rule-no-mocks",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "momus": [
+    {
+      "name": "high-quality-plan-scored-strong",
+      "synthetic_input": {
+        "critical": 0,
+        "major": 1,
+        "redteam": "3/3 SAFE"
+      },
+      "expected": "score ~85; verdict SAFE",
+      "passed": true,
+      "checks": [
+        {
+          "label": "rubric-band-85",
+          "passed": true
+        },
+        {
+          "label": "rubric-file-referenced",
+          "passed": true
+        },
+        {
+          "label": "has-score-field",
+          "passed": true
+        },
+        {
+          "label": "safe-verdict-mapped",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "redteam-block-hard-floor",
+      "synthetic_input": {
+        "redteam_block": true
+      },
+      "expected": "score capped at 50; verdict BLOCK",
+      "passed": true,
+      "checks": [
+        {
+          "label": "hard-floor-50",
+          "passed": true
+        },
+        {
+          "label": "block-verdict",
+          "passed": true
+        },
+        {
+          "label": "polish-is-not-rubric",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "anti-drift-large-jump",
+      "synthetic_input": {
+        "prior_score": 62,
+        "new_score": 88
+      },
+      "expected": "20+ point move requires justification sentence",
+      "passed": true,
+      "checks": [
+        {
+          "label": "anti-drift-mentioned",
+          "passed": true
+        },
+        {
+          "label": "threshold-20",
+          "passed": true
+        },
+        {
+          "label": "justification-required",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "score-verdict-mapping",
+      "synthetic_input": {
+        "score": 88,
+        "verdict_proposed": "CAUTION"
+      },
+      "expected": "88 -> SAFE; mismatch is validator error",
+      "passed": true,
+      "checks": [
+        {
+          "label": "mapping-rule",
+          "passed": true
+        },
+        {
+          "label": "safe-band-anchor",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "finding-schema-complete",
+      "synthetic_input": {
+        "finding": "one"
+      },
+      "expected": "finding has severity, category, reviewer, summary, evidence, suggestion, blocks_emission",
+      "passed": true,
+      "checks": [
+        {
+          "label": "finding-severity",
+          "passed": true
+        },
+        {
+          "label": "finding-category",
+          "passed": true
+        },
+        {
+          "label": "finding-reviewer",
+          "passed": true
+        },
+        {
+          "label": "finding-evidence",
+          "passed": true
+        },
+        {
+          "label": "finding-suggestion",
+          "passed": true
+        },
+        {
+          "label": "finding-blocks-emission",
+          "passed": true
+        },
+        {
+          "label": "one-finding-per-phase",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "red-team-trinity": [
+    {
+      "name": "depth-0-parallel-fan-out",
+      "synthetic_input": {
+        "depth": 0
+      },
+      "expected": "3 Task calls in single batch",
+      "passed": true,
+      "checks": [
+        {
+          "label": "parallel-required",
+          "passed": true
+        },
+        {
+          "label": "three-agents-listed",
+          "passed": true
+        },
+        {
+          "label": "must-rule",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "every-depth-invariant",
+      "synthetic_input": {
+        "depth": 2
+      },
+      "expected": "runs at every depth of the loop",
+      "passed": true,
+      "checks": [
+        {
+          "label": "every-depth",
+          "passed": true
+        },
+        {
+          "label": "defining-property",
+          "passed": true
+        },
+        {
+          "label": "contrast-cast-alloy",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "prior-findings-awareness",
+      "synthetic_input": {
+        "depth": 1,
+        "prior_findings": [
+          "..."
+        ]
+      },
+      "expected": "note resolved/persistent/new",
+      "passed": true,
+      "checks": [
+        {
+          "label": "resolved-persistent-new",
+          "passed": true
+        },
+        {
+          "label": "prior-findings-input",
+          "passed": true
+        },
+        {
+          "label": "no-soften",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "redteam-block-not-loop-exit",
+      "synthetic_input": {
+        "security_block": true
+      },
+      "expected": "BLOCK blocks emission but does not exit loop",
+      "passed": true,
+      "checks": [
+        {
+          "label": "block-blocks-emission",
+          "passed": true
+        },
+        {
+          "label": "not-loop-exit",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "three-envelopes-orchestrator-aggregates",
+      "synthetic_input": {
+        "depth": 1
+      },
+      "expected": "each adversary returns own envelope; orchestrator rolls up",
+      "passed": true,
+      "checks": [
+        {
+          "label": "roll-up-format",
+          "passed": true
+        },
+        {
+          "label": "independent-voices",
+          "passed": true
+        },
+        {
+          "label": "do-not-aggregate-inside",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "oracle": [
+    {
+      "name": "variance-converged-safe",
+      "synthetic_input": {
+        "reason": "variance",
+        "final_score": 85.0
+      },
+      "expected": "trust final Momus, SAFE, HIGH confidence",
+      "passed": true,
+      "checks": [
+        {
+          "label": "variance-trust",
+          "passed": true
+        },
+        {
+          "label": "variance-reason",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "cap-downgrade",
+      "synthetic_input": {
+        "reason": "cap",
+        "final_score": 68.0
+      },
+      "expected": "downgrade because cap with score < 85",
+      "passed": true,
+      "checks": [
+        {
+          "label": "cap-reason",
+          "passed": true
+        },
+        {
+          "label": "downgrade",
+          "passed": true
+        },
+        {
+          "label": "cap-threshold-85",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "delta-downgrade",
+      "synthetic_input": {
+        "reason": "delta",
+        "final_score": 64.0
+      },
+      "expected": "delta with score < 70 -> downgrade one tier",
+      "passed": true,
+      "checks": [
+        {
+          "label": "delta-reason",
+          "passed": true
+        },
+        {
+          "label": "downgrade-rule",
+          "passed": true
+        },
+        {
+          "label": "delta-threshold-70",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "missing-functional-validation-block",
+      "synthetic_input": {
+        "has_validation_phase": false
+      },
+      "expected": "Oracle emits BLOCK if plan lacks functional-validation phase",
+      "passed": true,
+      "checks": [
+        {
+          "label": "functional-validation",
+          "passed": true
+        },
+        {
+          "label": "missing-triggers-block",
+          "passed": true
+        },
+        {
+          "label": "block-verdict",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "output-schema-full",
+      "synthetic_input": {
+        "synthesize": true
+      },
+      "expected": "output has release_coherence, deployment_risk, breaking_changes, migration_cost, blast_radius, monitoring_recommendations",
+      "passed": true,
+      "checks": [
+        {
+          "label": "release-coherence",
+          "passed": true
+        },
+        {
+          "label": "deployment-risk",
+          "passed": true
+        },
+        {
+          "label": "breaking-changes",
+          "passed": true
+        },
+        {
+          "label": "migration-cost",
+          "passed": true
+        },
+        {
+          "label": "blast-radius",
+          "passed": true
+        },
+        {
+          "label": "monitoring-recs",
+          "passed": true
+        },
+        {
+          "label": "final-gate-before-hephaestus",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "hephaestus": [
+    {
+      "name": "iron-no-mocks",
+      "synthetic_input": {
+        "plan_says": "write unit tests"
+      },
+      "expected": "refuse to write tests/mocks; fix real system only",
+      "passed": true,
+      "checks": [
+        {
+          "label": "no-mocks-rule",
+          "passed": true
+        },
+        {
+          "label": "never-write-tests",
+          "passed": true
+        },
+        {
+          "label": "iron-rule-label",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "empty-evidence-invalid",
+      "synthetic_input": {
+        "build_exit": 0,
+        "screenshot_bytes": 0
+      },
+      "expected": "FAIL: empty file is invalid evidence; build success alone insufficient",
+      "passed": true,
+      "checks": [
+        {
+          "label": "empty-file-invalid",
+          "passed": true
+        },
+        {
+          "label": "invalid-evidence",
+          "passed": true
+        },
+        {
+          "label": "build-not-sufficient",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "fail-reloops-via-metis",
+      "synthetic_input": {
+        "verdict": "FAIL"
+      },
+      "expected": "fail_root_cause emitted; orchestrator re-loops via Metis",
+      "passed": true,
+      "checks": [
+        {
+          "label": "fail-root-cause-field",
+          "passed": true
+        },
+        {
+          "label": "metis-reloop",
+          "passed": true
+        },
+        {
+          "label": "depth-reset",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "never-modify-plan-to-pass",
+      "synthetic_input": {
+        "observed": "no button",
+        "criterion": "button appears"
+      },
+      "expected": "FAIL; never rewrite criterion",
+      "passed": true,
+      "checks": [
+        {
+          "label": "never-modify-plan",
+          "passed": true
+        },
+        {
+          "label": "no-rewrite-to-fit",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "evidence-schema",
+      "synthetic_input": {
+        "step": 1
+      },
+      "expected": "evidence at e2e-evidence/hephaestus/step-NN-*.{png,json,txt}",
+      "passed": true,
+      "checks": [
+        {
+          "label": "hephaestus-dir",
+          "passed": true
+        },
+        {
+          "label": "step-NN-pattern",
+          "passed": true
+        },
+        {
+          "label": "what-was-seen",
+          "passed": true
+        },
+        {
+          "label": "inventory",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "metis": [
+    {
+      "name": "ambiguous-task-block",
+      "synthetic_input": {
+        "user_task": "add user authentication"
+      },
+      "expected": "BLOCK verdict; populated clarifying_questions <=3",
+      "passed": true,
+      "checks": [
+        {
+          "label": "block-verdict",
+          "passed": true
+        },
+        {
+          "label": "clarifying-questions-field",
+          "passed": true
+        },
+        {
+          "label": "max-3",
+          "passed": true
+        },
+        {
+          "label": "one-sentence",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "directives-imperative-only",
+      "synthetic_input": {
+        "draft_directive": "Consider using JWT"
+      },
+      "expected": "REJECT soft; directives must be imperative",
+      "passed": true,
+      "checks": [
+        {
+          "label": "imperative-required",
+          "passed": true
+        },
+        {
+          "label": "not-suggestions",
+          "passed": true
+        },
+        {
+          "label": "bad-directive-example",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "validate-reloop-context",
+      "synthetic_input": {
+        "validate_fail_context": {
+          "fail_root_cause": "Redis not running"
+        }
+      },
+      "expected": "emit directive referencing failure root cause",
+      "passed": true,
+      "checks": [
+        {
+          "label": "validate-fail-context-field",
+          "passed": true
+        },
+        {
+          "label": "directive-references-failure",
+          "passed": true
+        },
+        {
+          "label": "preflight-or-dep-check",
+          "passed": true
+        },
+        {
+          "label": "no-downgrade-on-reloop",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "slop-risk-patterns",
+      "synthetic_input": {
+        "task": "refactor everything"
+      },
+      "expected": "flag slop-risk categories",
+      "passed": true,
+      "checks": [
+        {
+          "label": "scope-creep",
+          "passed": true
+        },
+        {
+          "label": "over-engineering",
+          "passed": true
+        },
+        {
+          "label": "hallucinated",
+          "passed": true
+        },
+        {
+          "label": "re-implementation",
+          "passed": true
+        },
+        {
+          "label": "deployment-ambiguity",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "never-plan-only-surface",
+      "synthetic_input": {
+        "role": "consult"
+      },
+      "expected": "Metis does not plan; only surfaces directives",
+      "passed": true,
+      "checks": [
+        {
+          "label": "never-plan",
+          "passed": true
+        },
+        {
+          "label": "only-surface",
+          "passed": true
+        },
+        {
+          "label": "directives-output",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ],
+  "atlas": [
+    {
+      "name": "emit-gate-conditions",
+      "synthetic_input": {
+        "simultaneous_pass": false,
+        "hephaestus": "PASS"
+      },
+      "expected": "Atlas NOT invoked when any EMIT condition false",
+      "passed": true,
+      "checks": [
+        {
+          "label": "simultaneous-pass-gate",
+          "passed": true
+        },
+        {
+          "label": "hephaestus-pass-gate",
+          "passed": true
+        },
+        {
+          "label": "safe-caution-only",
+          "passed": true
+        },
+        {
+          "label": "not-invoked-if-false",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "three-output-artifacts",
+      "synthetic_input": {
+        "run_id": "xyz"
+      },
+      "expected": "XML + plan/ + depth-history.json",
+      "passed": true,
+      "checks": [
+        {
+          "label": "xml-output",
+          "passed": true
+        },
+        {
+          "label": "plan-directory",
+          "passed": true
+        },
+        {
+          "label": "depth-history-json",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "atlas-serializes-only",
+      "synthetic_input": {
+        "plan": "text"
+      },
+      "expected": "Atlas does not edit / not review / not re-run",
+      "passed": true,
+      "checks": [
+        {
+          "label": "does-not-edit",
+          "passed": true
+        },
+        {
+          "label": "does-not-review",
+          "passed": true
+        },
+        {
+          "label": "only-agent-writes-outside",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "xml-validator-gate-before-write",
+      "synthetic_input": {
+        "xml": "<anneal_run>..."
+      },
+      "expected": "run validate-xml.py; if fails, do not emit",
+      "passed": true,
+      "checks": [
+        {
+          "label": "validate-xml-script",
+          "passed": true
+        },
+        {
+          "label": "do-not-emit-on-fail",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    },
+    {
+      "name": "xml-temper-additions",
+      "synthetic_input": {
+        "depth_history": "..."
+      },
+      "expected": "XML contains <depth_history>, <convergence>, <iteration_count>",
+      "passed": true,
+      "checks": [
+        {
+          "label": "depth-history-tag",
+          "passed": true
+        },
+        {
+          "label": "convergence-tag",
+          "passed": true
+        },
+        {
+          "label": "iteration-count-tag",
+          "passed": true
+        },
+        {
+          "label": "template-reference",
+          "passed": true
+        }
+      ],
+      "fail_labels": []
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+Skill                  Case                                         Verdict  Checks
+--------------------------------------------------------------------------------------------
+deepen-loop            seed-depth-0-continue                        PASS     5/5
+deepen-loop            variance-converged                           PASS     5/5
+deepen-loop            cap-hit                                      PASS     3/3
+deepen-loop            redteam-block-not-loop-exit                  PASS     3/3
+deepen-loop            convergence-check-exit-2                     PASS     2/2
+  [deepen-loop] 5/5
+prometheus-temper      depth-0-cold-start                           PASS     3/3
+prometheus-temper      depth-1-folds-feedback                       PASS     3/3
+prometheus-temper      depth-2-score-trajectory-awareness           PASS     3/3
+prometheus-temper      metis-contradicts-user-goal                  PASS     2/2
+prometheus-temper      output-schema-sections                       PASS     6/6
+  [prometheus-temper] 5/5
+momus                  high-quality-plan-scored-strong              PASS     4/4
+momus                  redteam-block-hard-floor                     PASS     3/3
+momus                  anti-drift-large-jump                        PASS     3/3
+momus                  score-verdict-mapping                        PASS     2/2
+momus                  finding-schema-complete                      PASS     7/7
+  [momus] 5/5
+red-team-trinity       depth-0-parallel-fan-out                     PASS     3/3
+red-team-trinity       every-depth-invariant                        PASS     3/3
+red-team-trinity       prior-findings-awareness                     PASS     3/3
+red-team-trinity       redteam-block-not-loop-exit                  PASS     2/2
+red-team-trinity       three-envelopes-orchestrator-aggregates      PASS     3/3
+  [red-team-trinity] 5/5
+oracle                 variance-converged-safe                      PASS     2/2
+oracle                 cap-downgrade                                PASS     3/3
+oracle                 delta-downgrade                              PASS     3/3
+oracle                 missing-functional-validation-block          PASS     3/3
+oracle                 output-schema-full                           PASS     7/7
+  [oracle] 5/5
+hephaestus             iron-no-mocks                                PASS     3/3
+hephaestus             empty-evidence-invalid                       PASS     3/3
+hephaestus             fail-reloops-via-metis                       PASS     3/3
+hephaestus             never-modify-plan-to-pass                    PASS     2/2
+hephaestus             evidence-schema                              PASS     4/4
+  [hephaestus] 5/5
+metis                  ambiguous-task-block                         PASS     4/4
+metis                  directives-imperative-only                   PASS     3/3
+metis                  validate-reloop-context                      PASS     4/4
+metis                  slop-risk-patterns                           PASS     5/5
+metis                  never-plan-only-surface                      PASS     3/3
+  [metis] 5/5
+atlas                  emit-gate-conditions                         PASS     4/4
+atlas                  three-output-artifacts                       PASS     3/3
+atlas                  atlas-serializes-only                        PASS     3/3
+atlas                  xml-validator-gate-before-write              PASS     2/2
+atlas                  xml-temper-additions                         PASS     4/4
+  [atlas] 5/5
+--------------------------------------------------------------------------------------------
+TOTAL PASS: 40/40
+
+Results JSON: ../skills-workspace/latest_results.json

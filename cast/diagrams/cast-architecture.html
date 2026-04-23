@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anneal Cast — Linear Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+
+  --bg: #faf7f2;
+  --bg-tint: #f4ece0;
+  --surface: #ffffff;
+  --surface-elevated: #fefcf7;
+  --surface-recessed: #f0ebe0;
+  --border: rgba(30, 58, 95, 0.10);
+  --border-bright: rgba(30, 58, 95, 0.22);
+  --text: #1a1a2e;
+  --text-bright: #0b0b1a;
+  --text-dim: #5a5a6e;
+  --text-muted: #8a8a9e;
+
+  --navy: #1e3a5f;
+  --navy-dim: rgba(30, 58, 95, 0.10);
+  --gold: #b38500;
+  --gold-dim: rgba(179, 133, 0, 0.14);
+  --gold-bright: #d4a73a;
+
+  --furnace: #b94a2c;
+  --furnace-dim: rgba(185, 74, 44, 0.12);
+  --crystal: #2c7a9e;
+  --crystal-dim: rgba(44, 122, 158, 0.12);
+  --red-team: #991b1b;
+  --red-team-dim: rgba(153, 27, 27, 0.10);
+  --validate: #15803d;
+  --validate-dim: rgba(21, 128, 61, 0.10);
+  --caution: #b45309;
+  --caution-dim: rgba(180, 83, 9, 0.10);
+
+  --accent: var(--navy);
+  --accent-dim: var(--navy-dim);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0a07;
+    --bg-tint: #1a1510;
+    --surface: #1a1410;
+    --surface-elevated: #221a14;
+    --surface-recessed: #14100c;
+    --border: rgba(244, 235, 216, 0.10);
+    --border-bright: rgba(244, 235, 216, 0.22);
+    --text: #f4ebd8;
+    --text-bright: #fdf6e3;
+    --text-dim: #a8a092;
+    --text-muted: #807868;
+    --navy: #7ea3c9;
+    --navy-dim: rgba(126, 163, 201, 0.14);
+    --gold: #d4a73a;
+    --gold-dim: rgba(212, 167, 58, 0.18);
+    --furnace: #e06a4c;
+    --furnace-dim: rgba(224, 106, 76, 0.18);
+    --crystal: #6ab4d9;
+    --crystal-dim: rgba(106, 180, 217, 0.14);
+    --red-team: #dc5c5c;
+    --red-team-dim: rgba(220, 92, 92, 0.14);
+    --validate: #4ea86d;
+    --validate-dim: rgba(78, 168, 109, 0.14);
+    --caution: #d99548;
+    --caution-dim: rgba(217, 149, 72, 0.14);
+    --accent: var(--navy);
+    --accent-dim: var(--navy-dim);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-wrap: break-word;
+}
+
+body {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(at 15% 8%, var(--gold-dim) 0%, transparent 55%),
+    radial-gradient(at 85% 92%, var(--navy-dim) 0%, transparent 55%);
+  padding: 48px 32px 96px;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Hero */
+
+.hero {
+  padding: 48px 0 64px;
+  border-bottom: 2px solid var(--border-bright);
+  margin-bottom: 64px;
+}
+
+.hero__kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-bright);
+  margin: 0 0 18px;
+}
+
+.hero__title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--navy);
+}
+
+.hero__lede {
+  font-size: 21px;
+  line-height: 1.55;
+  max-width: 720px;
+  color: var(--text-dim);
+  margin: 0 0 28px;
+}
+
+.hero__meta {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+}
+
+.hero__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero__meta strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Section headers */
+
+.section {
+  margin-bottom: 72px;
+}
+
+.section__kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.section__title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--text-bright);
+}
+
+.section__lede {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  max-width: 680px;
+  margin: 0 0 40px;
+}
+
+/* Pipeline diagram */
+
+.pipeline {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  padding: 48px 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-top: 1px dashed var(--border);
+}
+
+.stage:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.stage__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  padding-top: 4px;
+}
+
+.stage__num--heat {
+  color: var(--furnace);
+}
+
+.stage__num--cool {
+  color: var(--crystal);
+}
+
+.stage__num--review {
+  color: var(--red-team);
+}
+
+.stage__num--validate {
+  color: var(--validate);
+}
+
+.stage__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stage__name {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+}
+
+.stage__purpose {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+
+.stage__agents {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.agent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--surface-recessed);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.agent-chip--metis { color: var(--navy); border-color: var(--navy-dim); background: var(--navy-dim); }
+.agent-chip--prometheus { color: var(--furnace); border-color: var(--furnace-dim); background: var(--furnace-dim); }
+.agent-chip--momus { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-dim); }
+.agent-chip--redteam { color: var(--red-team); border-color: var(--red-team-dim); background: var(--red-team-dim); }
+.agent-chip--oracle { color: var(--crystal); border-color: var(--crystal-dim); background: var(--crystal-dim); }
+.agent-chip--hephaestus { color: var(--validate); border-color: var(--validate-dim); background: var(--validate-dim); }
+.agent-chip--atlas { color: var(--navy); border-color: var(--navy-dim); background: var(--navy-dim); }
+
+/* Re-loop marker */
+
+.reloop {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0;
+  padding: 16px 20px;
+  background: var(--caution-dim);
+  border-left: 3px solid var(--caution);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--caution);
+  letter-spacing: 0.5px;
+}
+
+.reloop__label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.reloop__detail {
+  color: var(--text-dim);
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Agents section — cards */
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.agent-card {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-card__name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+}
+
+.agent-card__etymology {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: var(--text-muted);
+}
+
+.agent-card__role {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.agent-card__meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.agent-card__meta strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Cost profile */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--navy);
+  padding: 20px 22px;
+  border-radius: 4px;
+}
+
+.stat__value {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-bright);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Footer */
+
+.footer {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* Responsive */
+
+@media (max-width: 720px) {
+  body { padding: 32px 20px 64px; }
+  .hero__title { font-size: 44px; }
+  .hero__lede { font-size: 18px; }
+  .section__title { font-size: 28px; }
+  .stage { grid-template-columns: 60px 1fr; gap: 16px; }
+  .pipeline { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div class="hero__kicker">Anneal · Proposal A · Linear</div>
+    <h1 class="hero__title">Cast &mdash; <em>single-pour</em> plan review</h1>
+    <p class="hero__lede">
+      One planner. One red team. One oracle. One validate. Emit. Cast is the fastest
+      of the three Anneal architectures &mdash; the one you reach for when the spec
+      is already clear and the task is scoped.
+    </p>
+    <div class="hero__meta">
+      <span><strong>Version</strong> 0.1.0</span>
+      <span><strong>Agents</strong> 7 named, 9 definitions</span>
+      <span><strong>Spawns</strong> ~8 per run</span>
+      <span><strong>Wall-clock</strong> ~4 min</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section__kicker">The Pipeline</div>
+    <h2 class="section__title">Seven stages, one direction</h2>
+    <p class="section__lede">
+      Stages 1 through 7 run sequentially. The only parallelism is at stage 5 where
+      the Red-Team Trinity fans out. On validate FAIL, the run routes back through
+      Metis &mdash; the failure folded as a new directive, not a fresh restart.
+    </p>
+
+    <div class="pipeline">
+      <div class="stages">
+
+        <div class="stage">
+          <div class="stage__num">01</div>
+          <div class="stage__body">
+            <div class="stage__name">Intent Gate</div>
+            <div class="stage__purpose">
+              Classify task shape. Reject unsafe inputs. Pass clean tasks forward.
+            </div>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num">02</div>
+          <div class="stage__body">
+            <div class="stage__name">Probe</div>
+            <div class="stage__purpose">
+              Scan codebase. Enumerate skills in ~/.claude/skills/ and project skills.
+              Read existing docs. Produce the probe report.
+            </div>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num stage__num--heat">03</div>
+          <div class="stage__body">
+            <div class="stage__name">Enrich</div>
+            <div class="stage__purpose">
+              Metis catches ambiguity and slop-risk patterns. Returns imperative
+              directives the planner must follow. BLOCK with clarifying_questions
+              aborts the run.
+            </div>
+            <div class="stage__agents">
+              <span class="agent-chip agent-chip--metis">Metis</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num stage__num--heat">04</div>
+          <div class="stage__body">
+            <div class="stage__name">Plan &mdash; single pass</div>
+            <div class="stage__purpose">
+              Prometheus writes the plan once. No tournament, no deepen loop.
+              Momus audits. If Momus returns BLOCK, the re-loop folds the finding
+              into a new Metis directive and restarts.
+            </div>
+            <div class="stage__agents">
+              <span class="agent-chip agent-chip--prometheus">Prometheus-Cast</span>
+              <span class="agent-chip agent-chip--momus">Momus</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num stage__num--review">05</div>
+          <div class="stage__body">
+            <div class="stage__name">Review &mdash; parallel adversaries</div>
+            <div class="stage__purpose">
+              Red-Team Trinity fans out in parallel: Security, Scope, Assumptions.
+              Three independent envelopes return; Oracle synthesizes the
+              bird's-eye verdict. Oracle BLOCK forces re-loop.
+            </div>
+            <div class="stage__agents">
+              <span class="agent-chip agent-chip--redteam">Red-Team-Security</span>
+              <span class="agent-chip agent-chip--redteam">Red-Team-Scope</span>
+              <span class="agent-chip agent-chip--redteam">Red-Team-Assumptions</span>
+              <span class="agent-chip agent-chip--oracle">Oracle</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num stage__num--validate">06</div>
+          <div class="stage__body">
+            <div class="stage__name">Validate</div>
+            <div class="stage__purpose">
+              Hephaestus builds and exercises the real artifact. Captures evidence
+              &mdash; build logs, CLI output, API responses, screenshots.
+              Returns PASS or FAIL.
+            </div>
+            <div class="stage__agents">
+              <span class="agent-chip agent-chip--hephaestus">Hephaestus</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reloop">
+          <span class="reloop__label">FAIL &rarr; re-loop</span>
+          <span class="reloop__detail">
+            Failure folded back through Metis as a new constraint. Not a fresh
+            restart &mdash; a constrained retry. Unbounded iteration count.
+          </span>
+        </div>
+
+        <div class="stage">
+          <div class="stage__num stage__num--cool">07</div>
+          <div class="stage__body">
+            <div class="stage__name">Emit</div>
+            <div class="stage__purpose">
+              Atlas assembles the Opus 4.7 semantic-XML prompt and the plan
+              directory, writing to ~/Desktop/anneal-runs/{run_id}/. The only
+              agent permitted to write outside the plugin's scoped directory.
+            </div>
+            <div class="stage__agents">
+              <span class="agent-chip agent-chip--atlas">Atlas</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__kicker">The Roster</div>
+    <h2 class="section__title">Seven named agents</h2>
+    <p class="section__lede">
+      Each agent has a Greek etymology that signals when it runs. The trio at
+      stage 5 is one role split into three independent spawns &mdash; parallelism
+      is the independence guarantee.
+    </p>
+
+    <div class="roster">
+
+      <div class="agent-card">
+        <div class="agent-card__name">Metis</div>
+        <div class="agent-card__etymology">Wisdom &middot; Prudence</div>
+        <div class="agent-card__role">
+          Pre-plan consultant. Catches ambiguity before the planner sees the task.
+          Emits directives the planner must respect.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 3</strong> &middot; Opus &middot; 1x/iter</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Prometheus</div>
+        <div class="agent-card__etymology">Forethought &middot; Craft-fire</div>
+        <div class="agent-card__role">
+          The planner. Single pass per iteration in Cast &mdash; no retry, no
+          tournament, no deepen. Writes phase files and plan.md.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 4</strong> &middot; Opus &middot; 1x/iter</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Momus</div>
+        <div class="agent-card__etymology">Satire &middot; Mockery</div>
+        <div class="agent-card__role">
+          Post-plan reviewer. Ruthless audit. Every phase gets at least one
+          finding unless genuinely SAFE. Flags, never fixes.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 4</strong> &middot; Opus &middot; 1x/iter</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Red-Team Trinity</div>
+        <div class="agent-card__etymology">Security &middot; Scope &middot; Assumptions</div>
+        <div class="agent-card__role">
+          Three parallel adversaries. Independent envelopes, no cross-priming.
+          BLOCK on CRITICAL findings forces re-loop.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 5</strong> &middot; Sonnet &middot; 3x parallel</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Oracle</div>
+        <div class="agent-card__etymology">Delphic &middot; Seer</div>
+        <div class="agent-card__role">
+          Bird's-eye synthesizer. Reads every reviewer envelope. Emits
+          release coherence, deployment risk, blast radius. Final gate before
+          validate.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 5</strong> &middot; Opus &middot; 1x/iter</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Hephaestus</div>
+        <div class="agent-card__etymology">Craftsman &middot; Forge</div>
+        <div class="agent-card__role">
+          Functional validator. Builds and exercises the real artifact. No
+          mocks, no stubs, no test files. PASS or FAIL with cited evidence.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 6</strong> &middot; Sonnet &middot; 1x/iter</div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-card__name">Atlas</div>
+        <div class="agent-card__etymology">Bearer &middot; World-carrier</div>
+        <div class="agent-card__role">
+          Emitter. Assembles XML prompt plus plan directory. The only agent
+          permitted to write outside the plugin's scoped directory.
+        </div>
+        <div class="agent-card__meta"><strong>Stage 7</strong> &middot; Sonnet &middot; 1x/emit</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__kicker">Cost Profile</div>
+    <h2 class="section__title">Fast by construction</h2>
+    <p class="section__lede">
+      Cast trades plan breadth for plan speed. When you don't need alternatives
+      explored, you don't pay for alternatives explored.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__value">~8</div>
+        <div class="stat__label">Agent spawns per run</div>
+      </div>
+      <div class="stat">
+        <div class="stat__value">~4 min</div>
+        <div class="stat__label">Wall-clock per run</div>
+      </div>
+      <div class="stat">
+        <div class="stat__value">~12 min</div>
+        <div class="stat__label">Worst-case with 3 re-loops</div>
+      </div>
+      <div class="stat">
+        <div class="stat__value">1</div>
+        <div class="stat__label">Planner passes per iteration</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Anneal &middot; Cast &middot; v0.1.0</span>
+    <span>MIT License &middot; Nick Krzemienski</span>
+    <span><a href="https://github.com/krzemienski/anneal">github.com/krzemienski/anneal</a></span>
+  </footer>
+
+</main>
+</body>
+</html>

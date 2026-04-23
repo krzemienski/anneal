@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anneal · Temper — Fixed-Point Deepen Architecture</title>
+<style>
+  :root {
+    --void: #0f172a;
+    --abyss: #1e293b;
+    --indigo: #6366f1;
+    --cyan: #22d3ee;
+    --cloud: #f1f5f9;
+    --prose: #cbd5e1;
+    --mist: #94a3b8;
+    --ember: #f59e0b;
+    --ruby: #e11d48;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 60px 40px;
+    font-family: "Charter", "Palatino", "Iowan Old Style", Georgia, serif;
+    background: var(--void);
+    color: var(--cloud);
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .masthead {
+    border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+    padding-bottom: 24px;
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 400;
+    margin: 0 0 8px;
+    color: var(--cloud);
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--prose);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .lede {
+    font-size: 19px;
+    color: var(--prose);
+    max-width: 700px;
+    margin: 32px 0;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 400;
+    margin: 56px 0 16px;
+    color: var(--cloud);
+    letter-spacing: -0.01em;
+    border-left: 3px solid var(--indigo);
+    padding-left: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cyan);
+    margin: 32px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  p { margin: 16px 0; }
+
+  code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 0.92em;
+    background: rgba(99, 102, 241, 0.15);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--cloud);
+  }
+
+  .pipeline {
+    background: var(--abyss);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 8px;
+    padding: 32px;
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--prose);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .pipeline .loop {
+    color: var(--ember);
+  }
+
+  .pipeline .gate {
+    color: var(--cyan);
+  }
+
+  .pipeline .agent {
+    color: var(--indigo);
+    font-weight: 600;
+  }
+
+  .pipeline .exit {
+    color: var(--ruby);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .card {
+    background: var(--abyss);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 6px;
+    padding: 20px;
+  }
+
+  .card .title {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 8px;
+  }
+
+  .card .body {
+    font-size: 15px;
+    color: var(--prose);
+    margin: 0;
+  }
+
+  .card .callout {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--ember);
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  }
+
+  th {
+    color: var(--cyan);
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    border-bottom: 2px solid var(--indigo);
+  }
+
+  td:first-child {
+    color: var(--cloud);
+    font-weight: 500;
+  }
+
+  .rule-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(34, 211, 238, 0.06));
+    border-left: 3px solid var(--cyan);
+    padding: 20px 24px;
+    border-radius: 4px;
+    margin: 20px 0;
+  }
+
+  .rule-num {
+    font-family: "SF Mono", "Menlo", monospace;
+    color: var(--cyan);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .rule-body {
+    margin-top: 8px;
+    color: var(--prose);
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(99, 102, 241, 0.2);
+    color: var(--mist);
+    font-size: 13px;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="masthead">
+    <p class="eyebrow">Anneal · Proposal C</p>
+    <h1>Temper</h1>
+    <p class="subtitle">Fixed-Point Deepen — one plan, heated and cooled repeatedly until scores stabilize.</p>
+  </header>
+
+  <p class="lede">
+    Temper's defining property: <strong>the Red-Team Trinity runs at every depth</strong>.
+    Cast runs red team once on a finished plan. Alloy runs red team once after
+    synthesizer blending. Temper folds adversarial feedback into the very next
+    rewrite. Each iteration genuinely learns from the prior.
+  </p>
+
+  <h2>The Pipeline</h2>
+
+  <div class="pipeline"><span class="gate">Intent Gate</span> → Probe → Enrich (<span class="agent">Metis</span>) → Seed Plan (<span class="agent">Prometheus-Temper</span>, depth=0)
+                                                            │
+                                                            ↓
+                    ┌────────────────── <span class="loop">DEEPEN LOOP</span> ──────────────────┐
+                    │                                                        │
+                    │  [depth N]                                             │
+                    │                                                        │
+                    │  <span class="agent">Prometheus-Temper</span> rewrites plan_{N-1}                │
+                    │      │   (inputs: prior plan, Momus score,             │
+                    │      │    red-team findings, Metis directives)         │
+                    │      ↓                                                 │
+                    │  plan_N                                                │
+                    │      │                                                 │
+                    │      ├───────────────┬──────────────┐                  │
+                    │      ↓               ↓              ↓                  │
+                    │  <span class="agent">Red-Team-</span>     <span class="agent">Red-Team-</span>      <span class="agent">Red-Team-</span>              │
+                    │  <span class="agent">Security</span>      <span class="agent">Scope</span>          <span class="agent">Assumptions</span>            │
+                    │      │               │              │                  │
+                    │      └───────┬───────┴──────────────┘                  │
+                    │              ↓                                         │
+                    │         <span class="agent">Momus</span>                                          │
+                    │         (verdict + <span class="exit">score 0-100</span>)                        │
+                    │              │                                         │
+                    │              ↓                                         │
+                    │       <span class="agent">Deepen-Loop</span> (orchestrator)                       │
+                    │              │                                         │
+                    │       <span class="loop">convergence-check.py</span>                              │
+                    │       ├── variance(top-3) < 0.3  → exit                │
+                    │       ├── |Δ|              < 0.15 → exit               │
+                    │       └── depth            == cap → exit               │
+                    │              │                                         │
+                    │              ↓ (no → depth++; yes → break)             │
+                    └────────────────────────────────────────────────────────┘
+                                    │
+                                    ↓
+                              <span class="agent">Oracle</span> (final plan)
+                                    │
+                                    ↓
+                            <span class="agent">Hephaestus</span> (validate)
+                                    │
+                        ┌───────────┴───────────┐
+                        ↓                       ↓
+                    PASS → <span class="agent">Atlas</span>            <span class="exit">FAIL → Seed (depth=0)</span>
+                                              with failure folded
+                                              into Metis directives</div>
+
+  <h2>Convergence Rules</h2>
+
+  <p>Three deterministic rules. No LLM decides when to exit. Exit when any one is true, in priority order <strong>variance &gt; delta &gt; cap</strong>.</p>
+
+  <div class="rule-box">
+    <div class="rule-num">RULE 1 · VARIANCE</div>
+    <div class="rule-body"><code>variance(top-3 depth scores) &lt; 0.3</code> — scores have stabilized. Order-insensitive, so a brief regression doesn't block convergence.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">RULE 2 · DELTA</div>
+    <div class="rule-body"><code>|score[-1] - score[-2]| &lt; 0.15</code> — marginal improvement, diminishing returns. Absolute, so a regression also triggers.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">RULE 3 · CAP</div>
+    <div class="rule-body"><code>depth &gt;= cap</code> — hard iteration ceiling. Default 3, user-configurable via <code>--depth N</code> (range 1-5).</div>
+  </div>
+
+  <h2>Roster at a Glance</h2>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <p class="title">Metis</p>
+      <p class="body">Pre-plan consultant. Catches ambiguity and slop-risk before the planner runs.</p>
+      <p class="callout">Runs 1× per run</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Prometheus-Temper</p>
+      <p class="body">Writer. Seeds at depth 0; rewrites at N≥1 with prior Momus + Red Team folded in.</p>
+      <p class="callout">Runs 1× per depth</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Deepen-Loop</p>
+      <p class="body">Orchestrator. Tracks scores, invokes convergence-check, decides next depth.</p>
+      <p class="callout">Runs 1× per run · deterministic</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Red-Team Trinity</p>
+      <p class="body">Security · Scope · Assumptions. Parallel. Inline at EVERY depth.</p>
+      <p class="callout">Runs 3× per depth, parallel</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Momus</p>
+      <p class="body">Post-plan reviewer. Emits verdict AND 0-100 score. Score drives convergence.</p>
+      <p class="callout">Runs 1× per depth</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Oracle</p>
+      <p class="body">Bird's-eye synthesizer. Reads full depth history + convergence reason.</p>
+      <p class="callout">Runs 1× per run</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Hephaestus</p>
+      <p class="body">Functional validator. Builds and exercises the real artifact. No mocks.</p>
+      <p class="callout">Runs 1× per run · may re-loop</p>
+    </div>
+
+    <div class="card">
+      <p class="title">Atlas</p>
+      <p class="body">Emitter. Writes XML + plan directory + depth-history.json on EMIT.</p>
+      <p class="callout">Runs 1× per run · only on EMIT</p>
+    </div>
+
+  </div>
+
+  <h2>Momus 0-100 Rubric</h2>
+
+  <table>
+    <thead>
+      <tr><th>Score</th><th>Band</th><th>Verdict</th><th>Meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>100</td><td>Perfect</td><td>SAFE</td><td>Ship now.</td></tr>
+      <tr><td>85-99</td><td>Excellent · Strong</td><td>SAFE</td><td>Minor polish only.</td></tr>
+      <tr><td>70-84</td><td>Solid · Borderline</td><td>CAUTION</td><td>Implementable with non-blocking concerns.</td></tr>
+      <tr><td>50-69</td><td>Weak · Poor</td><td>RISKY</td><td>Significant gaps.</td></tr>
+      <tr><td>0-49</td><td>Broken · Fundamental</td><td>BLOCK</td><td>Not implementable.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Cost Profile</h2>
+
+  <table>
+    <thead>
+      <tr><th>Depth</th><th>Agent spawns</th><th>Wall-clock</th><th>When to use</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>~8</td><td>~3 min</td><td>Cheapest Temper run; equivalent to Cast + inline red team.</td></tr>
+      <tr><td>2</td><td>~16</td><td>~5 min</td><td>Balanced: one rewrite with feedback loop.</td></tr>
+      <tr><td>3 (default)</td><td>~24</td><td>~7 min</td><td>Most Temper runs converge here naturally.</td></tr>
+      <tr><td>5 (max)</td><td>~40</td><td>~11 min</td><td>Really melt the rock. Rarely needed.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Invariants · The Non-Negotiables</h2>
+
+  <div class="rule-box">
+    <div class="rule-num">INVARIANT T1 — Red team at every depth</div>
+    <div class="rule-body">The defining property. Remove inline red team and Temper degenerates into Cast-with-retry.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">INVARIANT T2 — Momus emits 0-100 score</div>
+    <div class="rule-body">Required in Temper, not in Cast/Alloy. The score drives convergence.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">INVARIANT T3 — Deterministic convergence</div>
+    <div class="rule-body">No LLM decides when to exit. <code>convergence-check.py</code> is a pure function over the score history.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">INVARIANT T4 — Rewrites, not diffs</div>
+    <div class="rule-body">Each depth produces a full rewrite. Diffs let bad decisions persist invisibly.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-num">INVARIANT T5 — Re-loop resets to Seed</div>
+    <div class="rule-body">On Hephaestus FAIL, the whole deepen loop restarts from depth 0 with failure folded into Metis directives.</div>
+  </div>
+
+  <footer>
+    <p>Anneal · Temper v0.1.0 · MIT License · /anneal-temper:anneal</p>
+  </footer>
+
+</div>
+</body>
+</html>

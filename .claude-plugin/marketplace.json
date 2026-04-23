@@ -1,0 +1,40 @@
+{
+  "name": "anneal-umbrella-dev",
+  "description": "Development marketplace for the three Anneal architecture variants: Cast (linear), Alloy (tournament), Temper (fixed-point deepen). Install one or all three for head-to-head comparison.",
+  "owner": {
+    "name": "Nick Krzemienski",
+    "email": "nick@krzemienski.com"
+  },
+  "plugins": [
+    {
+      "name": "anneal-cast",
+      "description": "Linear single-pour architecture. One planner, one pass. Fastest of the three. Best for scoped tasks.",
+      "version": "0.1.0",
+      "source": "./cast",
+      "author": {
+        "name": "Nick Krzemienski"
+      },
+      "keywords": ["plan", "review", "multi-agent", "linear", "anneal"]
+    },
+    {
+      "name": "anneal-alloy",
+      "description": "Tournament consensus architecture. N parallel planners with biases, synthesizer blends. Best for novel architecture.",
+      "version": "0.1.0",
+      "source": "./alloy",
+      "author": {
+        "name": "Nick Krzemienski"
+      },
+      "keywords": ["plan", "review", "multi-agent", "tournament", "consensus", "anneal"]
+    },
+    {
+      "name": "anneal-temper",
+      "description": "Fixed-point deepen architecture. Iterative refinement with variance-based convergence. Best for complex but scoped tasks.",
+      "version": "0.1.0",
+      "source": "./temper",
+      "author": {
+        "name": "Nick Krzemienski"
+      },
+      "keywords": ["plan", "review", "multi-agent", "deepen", "fixed-point", "anneal"]
+    }
+  ]
+}

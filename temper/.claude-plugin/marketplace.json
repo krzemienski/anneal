@@ -1,0 +1,36 @@
+{
+  "name": "anneal-temper-dev",
+  "owner": {
+    "name": "Nick Krzemienski",
+    "email": "nick@krzemienski.com"
+  },
+  "metadata": {
+    "description": "Local development marketplace for anneal-temper. Install with: /plugin marketplace add <path-to-anneal-temper-plugin>",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "anneal-temper",
+      "source": ".",
+      "description": "Fixed-point deepen plan-review plugin — inline red team every depth, Momus 0-100 scoring, convergence by variance/delta/cap.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Nick Krzemienski",
+        "email": "nick@krzemienski.com"
+      },
+      "homepage": "https://github.com/krzemienski/anneal",
+      "license": "MIT",
+      "keywords": [
+        "plan",
+        "review",
+        "multi-agent",
+        "annealing",
+        "red-team",
+        "functional-validation",
+        "deepen",
+        "convergence"
+      ],
+      "category": "planning"
+    }
+  ]
+}
