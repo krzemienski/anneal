@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: "Emitter. When the rollup says EMIT, Atlas assembles the final artifact — an Opus 4.7 semantic-XML prompt and a plan directory — and writes them to disk under ~/Desktop/anneal-runs/{run_id}/. The only agent permitted to write outside the plugin's scoped working directory. Invoked at stage 7."
+description: "Emitter. When the rollup says EMIT, Atlas assembles the final artifact — an Opus 4.7 semantic-XML prompt and a plan directory — and writes them to disk under ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/. The only agent permitted to write outside the plugin's scoped working directory. Invoked at stage 7."
 model: sonnet
 ---
 
@@ -10,7 +10,7 @@ The artifact is two things:
 1. An Opus 4.7 semantic-XML file following `opus-47-xml-schema.md`
 2. A plan directory with one markdown file per phase, plus a top-level plan.md
 
-Output location: ~/Desktop/anneal-runs/{run_id}/
+Output location: ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 - {architecture}-{run_id}.xml
 - plan/plan.md
 - plan/phase-00-*.md through plan/phase-NN-*.md
@@ -66,21 +66,21 @@ architecture: cast
 verdict: <overall_verdict>
 iteration_count: <int>
 files:
-  - ~/Desktop/anneal-runs/<run_id>/cast-<run_id>.xml
-  - ~/Desktop/anneal-runs/<run_id>/plan/plan.md
-  - ~/Desktop/anneal-runs/<run_id>/plan/phase-00-*.md
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/cast-<run_id>.xml
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/plan/plan.md
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/plan/phase-00-*.md
   - ...
-  - ~/Desktop/anneal-runs/<run_id>/rollup.yaml
-  - ~/Desktop/anneal-runs/<run_id>/evidence/
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/rollup.yaml
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/evidence/
 next-step:
   $ claude
   > /clear
-  > Read ~/Desktop/anneal-runs/<run_id>/cast-<run_id>.xml and execute the plan.
+  > Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/<run_id>/cast-<run_id>.xml and execute the plan.
 ```
 
 ## Rules
 
-1. Never write outside `~/Desktop/anneal-runs/{run_id}/`.
+1. Never write outside `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`.
 2. Never edit plan content during serialization.
 3. Never concatenate runs into one XML.
 4. Always verify preconditions before writing.

@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: "Emitter for anneal-alloy runs. Assembles the final Opus 4.7 semantic-XML prompt plus plan directory at ~/Desktop/anneal-runs/{run_id}/ when the rollup is EMIT. The only agent permitted to write outside the plugin's scoped run directory. Never edits plans, never re-reviews, only serializes. Triggers: invoke at stage 7 of every anneal-alloy run on SAFE or CAUTION rollup, after Hephaestus returns PASS."
+description: "Emitter for anneal-alloy runs. Assembles the final Opus 4.7 semantic-XML prompt plus plan directory at ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/ when the rollup is EMIT. The only agent permitted to write outside the plugin's scoped run directory. Never edits plans, never re-reviews, only serializes. Triggers: invoke at stage 7 of every anneal-alloy run on SAFE or CAUTION rollup, after Hephaestus returns PASS."
 license: MIT
 ---
 
@@ -26,7 +26,7 @@ Serialize the approved anneal-alloy run into two artifacts — one Opus 4.7 sema
 ## Write protocol
 
 1. **Compute the rollup** from all envelopes per `references/schemas.md § Rollup structure`. If `emission_decision != EMIT`, exit with the appropriate signal to the orchestrator.
-2. **Create `output_root`** at `~/Desktop/anneal-runs/{run_id}/` if absent.
+2. **Create `output_root`** at `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` if absent.
 3. **Copy artifacts** from plugin scratch into `output_root`, as-is: `plan/`, `variants/`, `synthesis-provenance.md`, `reviews/` (including Hephaestus evidence tree).
 4. **Write the XML** to `alloy-{run_id}.xml` following `_shared/opus-47-xml-schema.md`. UTF-8 only, no BOM, no XML declaration. One atomic write — never append. Include the Alloy-specific `<tournament>` block inside `<metadata>` (see `references/schemas.md`).
 5. **Write `rollup.yaml`** containing the structure from step 1.

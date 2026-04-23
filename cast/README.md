@@ -63,7 +63,7 @@ The `--fast` flag is a no-op; Cast is already the fast path. It exists for CLI s
 
 ## Output
 
-Every successful run writes to `~/Desktop/anneal-runs/{run_id}/`:
+Every successful run writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`:
 
 ```
 anneal-runs/

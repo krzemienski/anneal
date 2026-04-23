@@ -31,7 +31,7 @@ Run `${CLAUDE_PLUGIN_ROOT}/scripts/orchestrate.sh` with the parsed arguments. Th
 ### Stage 1 · Intent Gate
 - Classify task shape (code, docs, plan, infrastructure, unknown).
 - Reject unsafe inputs (secrets leaked, destructive commands without scope).
-- Write `~/Desktop/anneal-runs/{run_id}/state.json` with initial state.
+- Write `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/state.json` with initial state.
 
 ### Stage 2 · Probe
 - Invoke the **Explore** capability (or `explore` skill if available) over the project root.
@@ -111,8 +111,8 @@ rollup:
 **EMIT** iff `simultaneous_pass == true` AND `overall_verdict ∈ {SAFE, CAUTION}`.
 
 If EMIT:
-- Atlas writes `~/Desktop/anneal-runs/{run_id}/alloy-{run_id}.xml` per `docs/emission-format.md`.
-- Atlas writes `~/Desktop/anneal-runs/{run_id}/plan/plan.md` and phase files.
+- Atlas writes `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/alloy-{run_id}.xml` per `docs/emission-format.md`.
+- Atlas writes `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/plan.md` and phase files.
 - Print to stdout: run_id, architecture=alloy, verdict, files written, next-step command for the fresh Claude Code session.
 
 If RE_LOOP:
@@ -125,7 +125,7 @@ If ABORT:
 
 ## Success criteria
 
-- XML file under `~/Desktop/anneal-runs/{run_id}/alloy-{run_id}.xml` following the semantic-XML schema
+- XML file under `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/alloy-{run_id}.xml` following the semantic-XML schema
 - Plan directory with `plan.md` + phase-NN-*.md files
 - `synthesis-provenance.md` showing per-phase variant attribution
 - All N variant files preserved under `variants/`

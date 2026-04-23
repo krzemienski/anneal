@@ -1,6 +1,6 @@
 # Atlas · Opus 4.7 XML Emission Template (Temper)
 
-The canonical XML body Atlas writes to `~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml`.
+The canonical XML body Atlas writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml`.
 Schema source: `_shared/opus-47-xml-schema.md`. This file adds Temper-specific additions (`<depth_history>`, `<convergence>`).
 
 ## Full template

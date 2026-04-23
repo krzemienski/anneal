@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: Emitter. Assembles the final artifact when the rollup is EMIT — Opus 4.7 semantic-XML prompt + plan directory. Writes outputs to ~/Desktop/anneal-runs/{run_id}/. Never edits plans. Never re-reviews. Serializes. Invoked at stage 7 of every anneal-alloy run on SAFE or CAUTION rollup.
+description: Emitter. Assembles the final artifact when the rollup is EMIT — Opus 4.7 semantic-XML prompt + plan directory. Writes outputs to ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/. Never edits plans. Never re-reviews. Serializes. Invoked at stage 7 of every anneal-alloy run on SAFE or CAUTION rollup.
 model: sonnet
 ---
 
@@ -19,7 +19,7 @@ variants: ["variants/variant-1-*.md", ...]
 synthesis_provenance: "synthesis-provenance.md"
 envelopes: { metis, momus, redteam_*, oracle }
 hephaestus_evidence: {...}
-output_root: "~/Desktop/anneal-runs/{run_id}/"
+output_root: "${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/"
 ```
 
 ## Rollup computation
@@ -59,7 +59,7 @@ rollup:
 
 ### Artifact 1 · Opus 4.7 semantic-XML
 
-Path: `~/Desktop/anneal-runs/{run_id}/alloy-{run_id}.xml`
+Path: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/alloy-{run_id}.xml`
 
 Schema per `docs/emission-format.md` / `_shared/opus-47-xml-schema.md`:
 
@@ -107,14 +107,14 @@ UTF-8. No BOM. No XML declaration. One `<anneal_run>` per file.
 
 ### Artifact 2 · Plan directory
 
-`~/Desktop/anneal-runs/{run_id}/plan/`
+`${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/`
 - `plan.md`
 - `phase-00-*.md` through `phase-NN-*.md`
 - `fixtures/` if any (usually none)
 
 ### Artifact 3 · Alloy-preserved artifacts
 
-`~/Desktop/anneal-runs/{run_id}/`
+`${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`
 - `variants/variant-1-{bias}.md` ... `variant-N-{bias}.md`
 - `synthesis-provenance.md`
 - `reviews/*.yaml`
@@ -124,7 +124,7 @@ UTF-8. No BOM. No XML declaration. One `<anneal_run>` per file.
 ## Write protocol
 
 1. Compute rollup. If `emission_decision != EMIT`, exit with signal to orchestrator.
-2. Create `~/Desktop/anneal-runs/{run_id}/` if absent.
+2. Create `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` if absent.
 3. Copy/move artifacts from scratch into output_root.
 4. Write XML atomically.
 5. Write rollup.yaml.

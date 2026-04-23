@@ -146,7 +146,7 @@ Claude Opus 4.7 parses best when long reference material sits at the top of the 
     <task>{verbatim task — MUST match <metadata><task> byte-for-byte}</task>
     <next_action>
       {what a fresh Claude Code session should do when it reads this XML}
-      Example: "Execute the plan in ~/Desktop/anneal-runs/{run_id}/plan/ phase by phase.
+      Example: "Execute the plan in ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/ phase by phase.
       After each phase, re-run scripts/validate-plugin.py and capture evidence."
     </next_action>
     <success_criteria>
@@ -193,7 +193,7 @@ Example: `alloy-anneal-20260422-1452-plugin-rewrite.xml`
 ## Emission location
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 ├── alloy-{run_id}.xml                ← this file
 ├── plan/
 │   ├── plan.md                        ← referenced from <plan>
@@ -217,7 +217,7 @@ Example: `alloy-anneal-20260422-1452-plugin-rewrite.xml`
 Every emitted XML file must pass `scripts/validate-xml.py`:
 
 ```bash
-python3 scripts/validate-xml.py ~/Desktop/anneal-runs/{run_id}/alloy-{run_id}.xml
+python3 scripts/validate-xml.py ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/alloy-{run_id}.xml
 # expected: XML VALIDATION PASSED
 ```
 

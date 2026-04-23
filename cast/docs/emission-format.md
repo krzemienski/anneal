@@ -106,7 +106,7 @@ Cast emissions are always `cast-anneal-YYYYMMDD-HHMMSS-{slug}.xml`.
 ## Emission directory
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
   {architecture}-{run_id}.xml
   plan/
     plan.md
@@ -123,7 +123,7 @@ From a fresh Claude Code session:
 ```
 $ claude
 > /clear
-> Read ~/Desktop/anneal-runs/{run_id}/cast-{run_id}.xml and execute the plan.
+> Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/cast-{run_id}.xml and execute the plan.
 ```
 
 The downstream session receives:

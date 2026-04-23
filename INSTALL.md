@@ -61,7 +61,7 @@ Same task, three architectures. Compare output quality, cost, wall-clock.
 /anneal-temper:anneal "rewrite the session-timeout handler to use JWT exp claims" --depth 3
 ```
 
-Each run emits to `~/Desktop/anneal-runs/{run_id}/` with:
+Each run emits to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` with:
 - `{architecture}-{run_id}.xml` — Opus 4.7 semantic XML prompt
 - `plan/plan.md` — executable plan
 - `plan/phase-*.md` — per-phase detail files

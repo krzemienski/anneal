@@ -129,10 +129,10 @@ rollup:
 ```
 
 Invoke **atlas** to serialize:
-- `~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml`
-- `~/Desktop/anneal-runs/{run_id}/plan/plan.md`
-- `~/Desktop/anneal-runs/{run_id}/plan/phase-00-*.md` ... `phase-NN-*.md`
-- `~/Desktop/anneal-runs/{run_id}/depth-history.json` — per-depth plans, envelopes, scores
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/plan.md`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/phase-00-*.md` ... `phase-NN-*.md`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/depth-history.json` — per-depth plans, envelopes, scores
 
 The XML follows `_shared/opus-47-xml-schema.md`. The plan directory is markdown.
 

@@ -57,7 +57,7 @@ The plugin is **v0.1.0-shippable** when:
 | 6 | Momus runs on synthesized plan, not individuals | momus-envelope.yaml cites `plan/` paths not `variants/` paths |
 | 7 | Red-Team Trinity runs in parallel after Momus | three envelopes produced within ±3s of each other |
 | 8 | Validate FAIL routes to Intent Gate, not Synthesizer | next iteration's Metis envelope includes failure as new constraint |
-| 9 | Output is XML + plan directory under `~/Desktop/anneal-runs/{run_id}/` | both files exist, XML follows `opus-47-xml-schema.md` |
+| 9 | Output is XML + plan directory under `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` | both files exist, XML follows `opus-47-xml-schema.md` |
 | 10 | No test files, no mocks, no stubs written anywhere | `grep -rE '(\.test\.|\.spec\.|mock|stub)' .` returns nothing in plugin source |
 
 ---

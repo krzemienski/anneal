@@ -85,7 +85,7 @@ Run the PST task through all three plugins. Rank their outputs against the origi
 
 **Phase 5 exit criteria:**
 - One architecture's output is selected as the canonical PST plan
-- The plan is moved from `~/Desktop/anneal-runs/{run_id}/` to `/Users/nick/Desktop/blog-series/plans/260422-<timestamp>-pst-contract-v2/` (replacing the failed v1)
+- The plan is moved from `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` to `/Users/nick/Desktop/blog-series/plans/260422-<timestamp>-pst-contract-v2/` (replacing the failed v1)
 - The selected architecture becomes the **default** for future anneal invocations (decision locked in `DECISION-LOCKED-v2.md`)
 
 ---

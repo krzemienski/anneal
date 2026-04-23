@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: "XML and plan emitter for anneal-cast. Reads the approved plan, all reviewer envelopes, and hephaestus evidence, then assembles an Opus 4.7 semantic-XML prompt plus a plan directory at ~/Desktop/anneal-runs/{run_id}/. The only skill permitted to write outside the plugin's scoped staging directory. Triggers: invoke at stage 7 of every /anneal-cast:anneal run only when rollup emission_decision equals EMIT. Do NOT invoke on RE_LOOP or ABORT outcomes, do NOT invoke twice per run (emission is atomic), do NOT rewrite plan markdown during serialization, and do NOT add an XML declaration (schema forbids it)."
+description: "XML and plan emitter for anneal-cast. Reads the approved plan, all reviewer envelopes, and hephaestus evidence, then assembles an Opus 4.7 semantic-XML prompt plus a plan directory at ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/. The only skill permitted to write outside the plugin's scoped staging directory. Triggers: invoke at stage 7 of every /anneal-cast:anneal run only when rollup emission_decision equals EMIT. Do NOT invoke on RE_LOOP or ABORT outcomes, do NOT invoke twice per run (emission is atomic), do NOT rewrite plan markdown during serialization, and do NOT add an XML declaration (schema forbids it)."
 license: MIT
 ---
 
@@ -38,13 +38,13 @@ envelopes:
   oracle: { ... }
 hephaestus_evidence: { ... }
 rollup: { ... }
-output_dir: ~/Desktop/anneal-runs/{run_id}/
+output_dir: ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 ```
 
 ## Output
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
   cast-{run_id}.xml        <- Opus 4.7 semantic-XML prompt
   plan/
     plan.md
@@ -63,13 +63,13 @@ Anneal Cast · EMIT
 run_id: anneal-260422-1440-plugin-rewrite
 verdict: CAUTION
 files:
-  - ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml
-  - ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/plan/plan.md
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/plan/plan.md
   - ...
 next-step:
   $ claude
   > /clear
-  > Read ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml and execute the plan.
+  > Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml and execute the plan.
 ```
 
 ## XML schema
@@ -86,7 +86,7 @@ Key placement rules:
 
 ## Rules
 
-1. Atlas is the ONLY agent permitted to write outside the plugin's scoped temp/staging directory. Atlas writes to `~/Desktop/anneal-runs/{run_id}/` and nowhere else.
+1. Atlas is the ONLY agent permitted to write outside the plugin's scoped temp/staging directory. Atlas writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` and nowhere else.
 2. Atlas does not edit plans. Atlas does not re-review. Atlas serializes.
 3. Atlas writes one `<anneal_run>` per XML file. Never concatenate runs.
 4. Filename is `{architecture}-{run_id}.xml` — for Cast that means `cast-anneal-YYYYMMDD-HHMMSS-{slug}.xml`.
@@ -108,7 +108,7 @@ After emission, Atlas prints the stdout summary shown above. The summary include
 - Writing XML with an `<?xml version=...?>` declaration (the schema forbids it).
 - Concatenating multiple runs into one XML file.
 - Rewriting plan markdown during serialization.
-- Writing outside `~/Desktop/anneal-runs/{run_id}/`.
+- Writing outside `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`.
 - Skipping the rollup.yaml sibling file.
 
 ## Agent binding

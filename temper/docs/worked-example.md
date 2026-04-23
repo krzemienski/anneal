@@ -344,10 +344,10 @@ convergence_reason: delta
 ```
 
 Atlas writes:
-- `~/Desktop/anneal-runs/anneal-temper-260422-1540-deepest-plan-rewrite/temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml`
-- `~/Desktop/anneal-runs/.../plan/plan.md` + 11 phase files
-- `~/Desktop/anneal-runs/.../depth-history.json`
-- `~/Desktop/anneal-runs/.../depth-history/depth-{0,1,2,3}-plan.md`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-temper-260422-1540-deepest-plan-rewrite/temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../plan/plan.md` + 11 phase files
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../depth-history.json`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../depth-history/depth-{0,1,2,3}-plan.md`
 
 Stdout:
 
@@ -359,12 +359,12 @@ Scores:       [62.0, 78.0, 85.0, 85.1]
 Convergence:  delta
 Verdict:      SAFE
 Validate:     PASS
-Emitted:      ~/Desktop/anneal-runs/.../temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml
-Plan:         ~/Desktop/anneal-runs/.../plan/
-History:      ~/Desktop/anneal-runs/.../depth-history.json
+Emitted:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml
+Plan:         ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../plan/
+History:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../depth-history.json
 
 Next: open a fresh Claude Code session and run:
-  cat ~/Desktop/anneal-runs/.../temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml | claude
+  cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/.../temper-anneal-temper-260422-1540-deepest-plan-rewrite.xml | claude
 ```
 
 ## Total cost

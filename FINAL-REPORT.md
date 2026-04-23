@@ -136,7 +136,7 @@ Each plugin ships its own dev marketplace:
 
 ### Head-to-head
 
-Run the same task through all three; compare outputs in `~/Desktop/anneal-runs/{run_id}/`. Full framework in `COMPARISON-PLAYBOOK.md`.
+Run the same task through all three; compare outputs in `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`. Full framework in `COMPARISON-PLAYBOOK.md`.
 
 ---
 
@@ -162,7 +162,7 @@ Total wall-clock: ~22 minutes from autopilot invocation to final report. Build f
 1. **Install all three.** Commands above.
 2. **Pick a real task.** Ideally a plan you were going to write anyway — a bug fix, a feature, a refactor.
 3. **Run it through all three.** Same task, three architectures.
-4. **Read the emitted XML + plans** in `~/Desktop/anneal-runs/{run_id}/`. Compare quality subjectively. Compare costs objectively.
+4. **Read the emitted XML + plans** in `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`. Compare quality subjectively. Compare costs objectively.
 5. **Use the decision rubric** in `COMPARISON-PLAYBOOK.md` to pick the architecture that fits your work.
 
 You don't have to commit to one. All three are installed. Use `/anneal-cast` when you need speed, `/anneal-alloy` when you need breadth, `/anneal-temper` when you need depth.

@@ -17,7 +17,7 @@ envelopes:
   redteam_assumptions: {...}
   oracle: {...}
 hephaestus_evidence: {...}
-output_root: "~/Desktop/anneal-runs/{run_id}/"
+output_root: "${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/"
 ```
 
 ## Rollup structure
@@ -67,7 +67,7 @@ Inside the root `<metadata>` element the emitter writes:
 ## Artifact layout
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
   alloy-{run_id}.xml                     # Opus 4.7 semantic-XML emission
   plan/
     plan.md                              # overview
@@ -98,7 +98,7 @@ verdict: CAUTION
 emission: EMIT
 
 files written:
-  ~/Desktop/anneal-runs/anneal-20260422-1452-plugin-rewrite/
+  ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-20260422-1452-plugin-rewrite/
     alloy-anneal-20260422-1452-plugin-rewrite.xml
     plan/plan.md
     plan/phase-00-baseline.md through phase-11-ship.md
@@ -116,6 +116,6 @@ tournament stats:
 
 next step:
   Paste into a fresh Claude Code session:
-    "Read ~/Desktop/anneal-runs/anneal-20260422-1452-plugin-rewrite/alloy-anneal-20260422-1452-plugin-rewrite.xml
+    "Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-20260422-1452-plugin-rewrite/alloy-anneal-20260422-1452-plugin-rewrite.xml
      and execute the plan therein per the <instructions><next_action> block."
 ```

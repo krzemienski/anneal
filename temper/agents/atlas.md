@@ -11,7 +11,7 @@ The artifact is three things:
 2. A plan directory with one markdown file per phase, plus a top-level plan.md.
 3. A Temper-specific depth-history.json file plus per-depth plan snapshots.
 
-Output location: `~/Desktop/anneal-runs/{run_id}/`
+Output location: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`
 
 You are the ONLY agent permitted to write outside the plugin's scoped directory. You do not edit plans. You do not re-review. You serialize.
 
@@ -49,12 +49,12 @@ Scores:       [s_0, s_1, ..., s_N]
 Convergence:  {reason}
 Verdict:      {overall_verdict}
 Validate:     PASS
-Emitted:      ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml
-Plan:         ~/Desktop/anneal-runs/{run_id}/plan/
-History:      ~/Desktop/anneal-runs/{run_id}/depth-history.json
+Emitted:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml
+Plan:         ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/
+History:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/depth-history.json
 
 Next: open a fresh Claude Code session and run:
-  cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml | claude
+  cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml | claude
 ```
 
 ## Behavior rules

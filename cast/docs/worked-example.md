@@ -166,7 +166,7 @@ rollup:
   iteration_count: 1
 ```
 
-Atlas writes to `~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/`:
+Atlas writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/`:
 
 - `cast-anneal-260422-1440-plugin-rewrite.xml`
 - `plan/plan.md`
@@ -183,14 +183,14 @@ architecture: cast
 verdict: CAUTION
 iteration_count: 1
 files:
-  - ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml
-  - ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/plan/plan.md
-  - ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/plan/phase-00-baseline.md
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/plan/plan.md
+  - ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/plan/phase-00-baseline.md
   - ...
 next-step:
   $ claude
   > /clear
-  > Read ~/Desktop/anneal-runs/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml and execute the plan.
+  > Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-260422-1440-plugin-rewrite/cast-anneal-260422-1440-plugin-rewrite.xml and execute the plan.
 ```
 
 ## Observations

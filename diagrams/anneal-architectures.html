@@ -1259,7 +1259,7 @@ Anneal's reviewer archetypes are directly inspired by <em>oh-my-openagent</em>'s
       <div class="agent__role">Emitter</div>
       <div class="agent__name">Atlas</div>
       <div class="agent__etymology">Bearer of the world; carries the whole artifact forward.</div>
-      <p class="agent__desc">Assembles the final XML prompt (Opus 4.7 semantic tags) and the plan directory. Enforces output schema. Writes to <code>~/Desktop/anneal-runs/{slug}/</code>. This is the only agent permitted to write outside the plan's scoped directory.</p>
+      <p class="agent__desc">Assembles the final XML prompt (Opus 4.7 semantic tags) and the plan directory. Enforces output schema. Writes to <code>${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{slug}/</code>. This is the only agent permitted to write outside the plan's scoped directory.</p>
       <div class="agent__runs"><strong>Runs:</strong> Stage 7</div>
     </div>
 
@@ -1627,7 +1627,7 @@ flowchart TD
           <li>Red-Team Trinity runs. Security finds nothing. Scope flags "Phase 11 too broad." Assumptions flags "assumes Opus 4.7 XML spec is stable."</li>
           <li>Oracle: <strong>CAUTION</strong> — "safe to ship but expect re-work on Phase 11."</li>
           <li>Hephaestus builds a dry-run. Validator confirms plugin boots, <code>/anneal</code> command registers, no crash on empty input.</li>
-          <li>Atlas emits <code>DEEPEST-PROMPT.xml</code> + <code>plan/phase-00...11.md</code> to <code>~/Desktop/anneal-runs/plugin-rewrite/</code>.</li>
+          <li>Atlas emits <code>DEEPEST-PROMPT.xml</code> + <code>plan/phase-00...11.md</code> to <code>${ANNEAL_RUNS_ROOT:-./.anneal/runs}/plugin-rewrite/</code>.</li>
         </ol>
 
         <div class="worked__outcome">

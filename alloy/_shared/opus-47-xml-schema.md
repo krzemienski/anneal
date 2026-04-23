@@ -84,4 +84,4 @@ The canonical schema every Atlas emission must follow. Claude Opus 4.7 reads the
 
 e.g. `cast-anneal-260422-1440-plugin-rewrite.xml`
 
-Emit to `~/Desktop/anneal-runs/{run_id}/` with a sibling `plan/` directory containing the markdown phase files that `<phases>` references by path.
+Emit to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` with a sibling `plan/` directory containing the markdown phase files that `<phases>` references by path.

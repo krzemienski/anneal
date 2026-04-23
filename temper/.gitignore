@@ -1,0 +1,9 @@
+# Runtime state — created by orchestrate.sh session-init
+.anneal/
+
+# Build-time scratch — skill-snapshot iterations and per-iteration logs
+skills-workspace/
+
+# Generic
+*.log
+.DS_Store

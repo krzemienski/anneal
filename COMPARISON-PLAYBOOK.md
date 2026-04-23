@@ -30,7 +30,7 @@ Run it against all three, one after another:
 /anneal-temper:anneal "rewrite the deepest-plan plugin to use SADD primitives and fix the 91 asymmetric-vendoring defects. ship a functional v0.1.0 that passes its own red team." --depth 3
 ```
 
-Each run writes to `~/Desktop/anneal-runs/{run_id}/`.
+Each run writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`.
 
 ## What to measure
 
@@ -99,7 +99,7 @@ Use this grid to pick the right architecture for a new task:
 
 ## Reporting
 
-After each comparison, save a summary to `~/Desktop/anneal-runs/comparison-YYYYMMDD.md`:
+After each comparison, save a summary to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/comparison-YYYYMMDD.md`:
 
 ```markdown
 # Comparison · {task-one-line} · {date}

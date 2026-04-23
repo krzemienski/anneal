@@ -41,7 +41,7 @@ rollup: {architecture: temper, overall_verdict, gate_status, ...}
 
 ### 1. Opus 4.7 semantic-XML file
 
-Path: `~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml`
+Path: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml`
 
 Format: see `references/xml-template.md` for the full body template. Schema source: `_shared/opus-47-xml-schema.md`.
 
@@ -52,7 +52,7 @@ Temper-specific additions to the base schema:
 
 ### 2. Plan directory
 
-Path: `~/Desktop/anneal-runs/{run_id}/plan/`
+Path: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/`
 
 Contents:
 - `plan.md` — top-level overview, sub-80 lines, links to each phase file.
@@ -61,7 +61,7 @@ Contents:
 
 ### 3. Depth history log (Temper-specific)
 
-Path: `~/Desktop/anneal-runs/{run_id}/depth-history.json`
+Path: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/depth-history.json`
 
 ```json
 {
@@ -86,7 +86,7 @@ Path: `~/Desktop/anneal-runs/{run_id}/depth-history.json`
 }
 ```
 
-Plus per-depth plan snapshots under `~/Desktop/anneal-runs/{run_id}/depth-history/`:
+Plus per-depth plan snapshots under `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/depth-history/`:
 - `depth-0-plan.md`
 - `depth-1-plan.md`
 - `depth-N-plan.md`
@@ -101,12 +101,12 @@ Scores:       [s_0, s_1, ..., s_N]
 Convergence:  {reason}
 Verdict:      {overall_verdict}
 Validate:     PASS
-Emitted:      ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml
-Plan:         ~/Desktop/anneal-runs/{run_id}/plan/
-History:      ~/Desktop/anneal-runs/{run_id}/depth-history.json
+Emitted:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml
+Plan:         ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/
+History:      ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/depth-history.json
 
 Next: open a fresh Claude Code session and run:
-  cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml | claude
+  cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml | claude
 ```
 
 ## Behavior rules

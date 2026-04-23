@@ -8,7 +8,7 @@
 #
 # Behavior:
 #   - Parse CLI args
-#   - Create run directory under ~/Desktop/anneal-runs/{run_id}/
+#   - Create run directory under ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 #   - Delegate the actual agent dispatch to the Claude Code harness via the
 #     command/skill contract. This script's job is to serialize the stages and
 #     enforce the N-parallel discipline for Stage 4.
@@ -118,7 +118,8 @@ TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 # Slug from task: first 32 chars, lowercase, only alnum and hyphens
 SLUG="$(echo "$TASK" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9' '-' | sed 's/--*/-/g; s/^-//; s/-$//' | cut -c1-32)"
 RUN_ID="anneal-${TIMESTAMP}-${SLUG}"
-RUN_ROOT="${HOME}/Desktop/anneal-runs/${RUN_ID}"
+RUNS_ROOT="${ANNEAL_RUNS_ROOT:-${PWD}/.anneal/runs}"
+RUN_ROOT="${RUNS_ROOT}/${RUN_ID}"
 
 mkdir -p "${RUN_ROOT}"/{plan,variants,reviews/hephaestus-evidence}
 

@@ -16,7 +16,7 @@ This doc is the answer. No theory, just keystrokes.
 │                                                                          │
 │  > /anneal-temper:anneal "<your task>" --depth 3                        │
 │                                                                          │
-│  → Writes to ~/Desktop/anneal-runs/{run_id}/                            │
+│  → Writes to ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/                            │
 │     ├── temper-{run_id}.xml     (the handoff prompt)                    │
 │     └── plan/                   (phase files + plan.md)                 │
 │                                                                          │
@@ -30,7 +30,7 @@ This doc is the answer. No theory, just keystrokes.
 │  claude                                                                 │
 │                                                                          │
 │  Paste the entire contents of temper-{run_id}.xml into the chat.        │
-│  (Or: cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml | pbcopy)  │
+│  (Or: cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml | pbcopy)  │
 │                                                                          │
 │  → Session 2 executes the plan phase by phase, with functional          │
 │     validation between every phase, until done.                         │
@@ -100,7 +100,7 @@ Wall-clock: ~4 min (Cast), ~6 min (Alloy), ~7 min (Temper). You'll see the sub-a
 
 ### What you get
 
-At the end, `~/Desktop/anneal-runs/{run_id}/`:
+At the end, `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`:
 
 ```
 anneal-runs/{run_id}/
@@ -133,23 +133,23 @@ cd /path/to/target-project
 claude
 
 # Then in the session, paste:
-cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml
+cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml
 # (on macOS: | pbcopy and paste into the Claude Code prompt)
 ```
 
 **Option B — Use `/ck:cook` skill** (ClaudeKit — `~/.claude/skills/cook/SKILL.md`):
 ```
-/ck:cook ~/Desktop/anneal-runs/{run_id}/plan/plan.md --auto
+/ck:cook ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/plan.md --auto
 ```
 `ck:cook` ingests a plan markdown path (NOT the XML file) and drives end-to-end implementation. Per its own docs it supports `--interactive` (default), `--fast`, `--parallel`, `--auto`, `--no-test`, `--tdd`. For anneal plans which already have functional-validation phases baked in, `--auto` is appropriate since the plan itself gates each phase.
 
 **Option C — Headless / non-interactive with `-p`**:
 ```bash
 # Runs once, no interactive session. Good for CI / automation.
-claude -p "$(cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml)"
+claude -p "$(cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml)"
 
 # For very large XML (>100 KB), stdin-pipe is safer than argv interpolation:
-cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml | claude -p
+cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml | claude -p
 ```
 
 **Recommendation for your question ("run with -p"):** Only use `-p` if you want headless / automated execution. For a real task where you might want to intervene mid-run or inspect intermediate state, use Option A (paste into interactive chat).
@@ -191,7 +191,7 @@ cd /Users/nick/Desktop/blog-series
 claude
 
 # Paste into the chat:
-cat ~/Desktop/anneal-runs/{run_id-from-session-1}/temper-{run_id}.xml
+cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id-from-session-1}/temper-{run_id}.xml
 ```
 
 Session 2 will build the PST contract. Every phase validates against a real build. When the plan emits SAFE (all gates simultaneously green), you're done — `site/src/lib/products.ts` is updated, product sites render, validation evidence is captured in `e2e-evidence/`.
@@ -228,7 +228,7 @@ This isn't a flag you pass. It's an Iron Rule baked into every plan anneal emits
 /anneal-temper:anneal "<your task>" --depth 3
 
 # Session 2 — execute (target project directory)
-cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml | pbcopy
+cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml | pbcopy
 # paste into new Claude Code session
 ```
 

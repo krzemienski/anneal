@@ -43,12 +43,12 @@ Executed `/anneal-cast:anneal "Write one line 'hello world' to /tmp/anneal-probe
 
 **Artifacts produced (all personally verified with `cat` / `wc` / `ls`):**
 - `/tmp/anneal-probe/readme.txt` — "hello world" + newline, exactly 12 bytes ✓
-- `~/Desktop/anneal-runs/cast-smoke-260422-1936/cast-cast-smoke-260422-1936.xml` — 239 lines of Opus 4.7 semantic-XML ✓
-- `~/Desktop/anneal-runs/cast-smoke-260422-1936/rollup.yaml` — `simultaneous_pass: true`, per-reviewer verdicts recorded ✓
-- `~/Desktop/anneal-runs/cast-smoke-260422-1936/plan/plan.md` + `phase-01-write-hello-world.md` ✓
-- `~/Desktop/anneal-runs/cast-smoke-260422-1936/evidence/` — Hephaestus build log, xxd dump, ls, read capture, artifact copy ✓
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/cast-smoke-260422-1936/cast-cast-smoke-260422-1936.xml` — 239 lines of Opus 4.7 semantic-XML ✓
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/cast-smoke-260422-1936/rollup.yaml` — `simultaneous_pass: true`, per-reviewer verdicts recorded ✓
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/cast-smoke-260422-1936/plan/plan.md` + `phase-01-write-hello-world.md` ✓
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/cast-smoke-260422-1936/evidence/` — Hephaestus build log, xxd dump, ls, read capture, artifact copy ✓
 
-**Second round-trip also succeeded** (`~/Desktop/anneal-runs/cast-260422-1950-hello-world-probe/`) — the pipeline is repeatable, not a one-off.
+**Second round-trip also succeeded** (`${ANNEAL_RUNS_ROOT:-./.anneal/runs}/cast-260422-1950-hello-world-probe/`) — the pipeline is repeatable, not a one-off.
 
 ### Dispatch-semantics fix applied mid-session
 
@@ -181,9 +181,9 @@ These were not testable via static analysis:
 /anneal-temper:anneal "<your task>" --depth 3
 
 # Execute session (in target project)
-cat ~/Desktop/anneal-runs/{run_id}/temper-{run_id}.xml   # paste into fresh Claude Code session
+cat ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/temper-{run_id}.xml   # paste into fresh Claude Code session
 # or
-/ck:cook ~/Desktop/anneal-runs/{run_id}/plan/plan.md --auto
+/ck:cook ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/plan.md --auto
 ```
 
 All three paths are documented in `WORKFLOW.md` (Options A/B/C).

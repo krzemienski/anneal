@@ -111,7 +111,7 @@ Invoke the `atlas` agent. Input:
 - Hephaestus evidence
 - Rollup computed per `_shared/plan-reviewer-schema.md`
 
-Atlas writes to `~/Desktop/anneal-runs/{run_id}/`:
+Atlas writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`:
 - `cast-{run_id}.xml` (Opus 4.7 semantic-XML per `_shared/opus-47-xml-schema.md`)
 - `plan/plan.md`
 - `plan/phase-*.md`

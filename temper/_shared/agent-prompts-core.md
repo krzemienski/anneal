@@ -236,7 +236,7 @@ The artifact is two things:
 1. An Opus 4.7 semantic-XML file following `opus-47-xml-schema.md`
 2. A plan directory with one markdown file per phase, plus a top-level plan.md
 
-Output location: ~/Desktop/anneal-runs/{run_id}/
+Output location: ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 - {architecture}-{run_id}.xml
 - plan/plan.md
 - plan/phase-00-*.md through plan/phase-NN-*.md

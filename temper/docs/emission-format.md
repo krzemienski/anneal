@@ -5,7 +5,7 @@ The XML Atlas writes at stage 7, plus the companion plan directory and depth-his
 ## File layout
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 ├── temper-{run_id}.xml           # Opus 4.7 semantic-XML
 ├── plan/
 │   ├── plan.md                   # Top-level plan overview (< 80 lines)

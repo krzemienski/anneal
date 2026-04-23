@@ -26,7 +26,7 @@ Paste this string after install and watch:
 /anneal-temper:anneal "Deliver the Product Site Template contract for withagents.dev. Every product gets: hero, 3-sentence what-it-does, ≥2 inline usage examples, architecture diagram, how-it-works, feature matrix, install/docs/changelog, links back to brand. Three-tier strategy (Tier 1 apex, Tier 2 subdomain rewrite, Tier 3 separate Vercel). Validate via functional-validation + visual-inspection at 375/768/1440 + e2e cross-domain navigation. No mocks, no test files." --depth 3
 ```
 
-Output lands at `~/Desktop/anneal-runs/{run_id}/` with:
+Output lands at `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/` with:
 - `temper-{run_id}.xml` — the handoff prompt
 - `plan/plan.md` + `plan/phase-NN-*.md` — executable phases
 - Every phase has cited evidence criteria, no mocks, no test files

@@ -78,7 +78,7 @@ Every Cast run calls Hephaestus. Even on a pure-refactor task with no runtime su
 
 ### AD-4: Atlas owns the only outside-plugin write
 
-No agent except Atlas writes outside the plugin's scoped working directory. Atlas writes to `~/Desktop/anneal-runs/{run_id}/`. This concentrates file-system side effects in one place.
+No agent except Atlas writes outside the plugin's scoped working directory. Atlas writes to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`. This concentrates file-system side effects in one place.
 
 **Rationale:** Audit trail. Every file on disk has exactly one author.
 
@@ -97,7 +97,7 @@ Hooks live in `hooks/hooks.json` per the Claude Code plugin spec. The file is au
 - FR-3: If `$1` empty, prompt the user for a task
 - FR-4: Execute stages 1 through 7 in order
 - FR-5: At stage 5, fan out Red-Team Trinity in parallel
-- FR-6: At stage 7, emit XML + plan directory to `~/Desktop/anneal-runs/{run_id}/`
+- FR-6: At stage 7, emit XML + plan directory to `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/`
 - FR-7: On validate FAIL, route back to Metis with failure as new constraint
 - FR-8: Refuse to emit if `simultaneous_pass` is false or `overall_verdict` is RISKY or BLOCK without explicit user override
 

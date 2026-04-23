@@ -16,7 +16,7 @@ No `--versions` → defaults to **N=5**.
 
 - Task shape: `code + plan + infrastructure`
 - Not destructive (no `rm -rf`, no credentials cited)
-- State: `~/Desktop/anneal-runs/anneal-20260422-1452-rewrite-the-deepest-plan-plugi/state.json` initialized
+- State: `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-20260422-1452-rewrite-the-deepest-plan-plugi/state.json` initialized
 
 **Elapsed:** ~2s
 
@@ -305,17 +305,17 @@ rollup:
 `simultaneous_pass: true` AND `overall_verdict: CAUTION` → **EMIT**.
 
 Atlas writes:
-- `~/Desktop/anneal-runs/{run_id}/alloy-{run_id}.xml`
-- `~/Desktop/anneal-runs/{run_id}/plan/plan.md` + 12 phase files
-- `~/Desktop/anneal-runs/{run_id}/variants/` (5 files preserved)
-- `~/Desktop/anneal-runs/{run_id}/synthesis-provenance.md`
-- `~/Desktop/anneal-runs/{run_id}/reviews/` (6 envelopes + evidence)
-- `~/Desktop/anneal-runs/{run_id}/rollup.yaml`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/alloy-{run_id}.xml`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/plan/plan.md` + 12 phase files
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/variants/` (5 files preserved)
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/synthesis-provenance.md`
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/reviews/` (6 envelopes + evidence)
+- `${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/rollup.yaml`
 
 Prints next-step command:
 ```
 Paste into a fresh Claude Code session:
-"Read ~/Desktop/anneal-runs/anneal-20260422-1452-rewrite-the-deepest-plan-plugi/alloy-*.xml
+"Read ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/anneal-20260422-1452-rewrite-the-deepest-plan-plugi/alloy-*.xml
  and execute the plan therein per the <instructions><next_action> block."
 ```
 

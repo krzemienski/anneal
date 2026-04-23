@@ -102,7 +102,7 @@ A run emits iff `simultaneous_pass == true` AND `overall_verdict in [SAFE, CAUTI
 ## File layout produced per run
 
 ```
-~/Desktop/anneal-runs/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/
   cast-anneal-260422-1440-{slug}/
     cast-{run_id}.xml        <- Opus 4.7 semantic-XML prompt
     plan/

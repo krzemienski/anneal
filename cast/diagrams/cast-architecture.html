@@ -608,7 +608,7 @@ body::before {
             <div class="stage__name">Emit</div>
             <div class="stage__purpose">
               Atlas assembles the Opus 4.7 semantic-XML prompt and the plan
-              directory, writing to ~/Desktop/anneal-runs/{run_id}/. The only
+              directory, writing to ${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/. The only
               agent permitted to write outside the plugin's scoped directory.
             </div>
             <div class="stage__agents">

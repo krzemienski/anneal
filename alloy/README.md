@@ -117,7 +117,7 @@ On validate FAIL, Alloy routes back to **Intent Gate** — not to the synthesize
 ## Outputs
 
 ```
-~/Desktop/anneal-runs/{run_id}/
+${ANNEAL_RUNS_ROOT:-./.anneal/runs}/{run_id}/
 ├── alloy-{run_id}.xml              # Opus 4.7 semantic-XML prompt
 ├── plan/
 │   ├── plan.md                     # Overview

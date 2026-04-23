@@ -59,7 +59,7 @@ fi
 # ----- Environment --------------------------------------------------------
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
-RUNS_ROOT="${HOME}/Desktop/anneal-runs"
+RUNS_ROOT="${ANNEAL_RUNS_ROOT:-${PWD}/.anneal/runs}"
 TIMESTAMP="$(date +%y%m%d-%H%M)"
 SLUG="$(echo "$TASK" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g' | cut -c1-40)"
 RUN_ID="anneal-${TIMESTAMP}-${SLUG}"
