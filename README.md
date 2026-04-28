@@ -2,6 +2,8 @@
 
 > Controlled heating, slow cooling, iterative tempering — applied to work plans.
 
+🌐 **Live site:** [anneal.withagents.dev](https://anneal.withagents.dev)
+
 **Runtime status (2026-04-22):** Cast pipeline verified end-to-end in a real Claude Code worker — all 9 Greek-god agents dispatched, artifact written with exact byte match, XML emitted and passes `validate-xml.py`. See [`VERIFICATION-SUMMARY.md`](./VERIFICATION-SUMMARY.md) for the full trace. Alloy and Temper passed load verification; full E2E runs in progress.
 
 **Anneal** is a Claude Code plugin family that converts a vague task into a rigorously-reviewed execution artifact: an XML prompt, a plan directory, and the skill enrichment needed to run it. It replaces the earlier `deepest-plan` prototype (shipped with 91 validator defects due to asymmetric vendoring) with a cleaner core built around three named plan-review archetypes — **Metis**, **Momus**, **Oracle** — and an always-on red team.
@@ -109,7 +111,7 @@ Each is a complete plugin with its own PRD, architecture doc, skills, agents, or
 - **[Aider](https://aider.chat/)** — Terminal-first ergonomics, zero-ceremony invocation. Anneal is plan-first rather than edit-first, but shares the "just type and go" philosophy.
 - **[Ralph](https://github.com/gheorghe-ciubuc/ralph)** — The unbounded-re-loop discipline. "The boulder never stops." Anneal's stage-7 simultaneous-pass gate trinity is Ralph-shaped.
 - **[SADD](https://github.com/Yeachan-Heo/context-engineering-kit)** — The primitive vocabulary (launch-sub-agent, do-in-parallel, do-and-judge, tree-of-thoughts) that Temper in particular composes.
-- **[ValidationForge](./multi-agent-consensus)** — Anneal's validation family: `functional-validation`, `create-validation-plan`, `verdict-writer`, `preflight`. Hephaestus is its embodiment.
+- **[ValidationForge](https://github.com/krzemienski/validationforge)** — Anneal's validation family: `functional-validation`, `create-validation-plan`, `verdict-writer`, `preflight`. Hephaestus is its embodiment.
 
 ---
 
