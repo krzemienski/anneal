@@ -2,7 +2,10 @@
 
 > Controlled heating, slow cooling, iterative tempering — applied to work plans.
 
-🌐 **Live site:** [anneal.withagents.dev](https://anneal.withagents.dev)
+Live site: [anneal.withagents.dev](https://anneal.withagents.dev)
+Field journal entry: [withagents.dev/posts/post-19-anneal](https://withagents.dev/posts/post-19-anneal)
+
+---
 
 **Runtime status (2026-04-22):** Cast pipeline verified end-to-end in a real Claude Code worker — all 9 Greek-god agents dispatched, artifact written with exact byte match, XML emitted and passes `validate-xml.py`. See [`VERIFICATION-SUMMARY.md`](./VERIFICATION-SUMMARY.md) for the full trace. Alloy and Temper passed load verification; full E2E runs in progress.
 
